@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quadro de Urgências — SeuBoné</title>
+<meta http-equiv="refresh" content="900">
+<style>
+ :root{--ouro:#D4A017;--chumbo:#3A3A3A;--preto:#0A0A0A;--prem:#D4A017;--ess:#2E9C8E;--vermelho:#E0533D;--colw:440px;--imgh:250px}
+ *{box-sizing:border-box;margin:0;padding:0}
+ html,body{height:100%}
+ body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--preto);color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+ header{flex:0 0 auto;background:linear-gradient(180deg,#111,#0A0A0A);border-bottom:2px solid var(--ouro);padding:14px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+ header h1{font-size:19px;letter-spacing:.5px} header h1 b{color:var(--ouro)}
+ .sub{color:#9a9a9a;font-size:12px;margin-top:2px}
+ .spacer{flex:1}
+ .stat{background:#1c1c1c;border:1px solid #2c2c2c;border-radius:10px;padding:6px 12px;font-size:12px;color:#ccc} .stat b{color:#fff;font-size:15px}
+ .stat.alert b{color:var(--vermelho)}
+ .filtros{display:flex;gap:8px}
+ .fbtn{background:#1c1c1c;border:1px solid #333;color:#ccc;padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600}
+ .fbtn.active{background:var(--ouro);color:#0A0A0A;border-color:var(--ouro)}
+ .board{flex:1;min-height:0;display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:16px 22px;align-items:stretch}
+ .col{flex:0 0 var(--colw);display:flex;flex-direction:column;min-height:0;background:#141414;border:1px solid #242424;border-radius:14px;overflow:hidden}
+ .col.atrasados{flex:0 0 var(--colw);border:1px solid #5a2018}
+ .col.hoje{border:1px solid var(--ouro);box-shadow:0 0 0 1px var(--ouro)}
+ .col.hoje .colhead{background:#4a3a10}
+ .colhead{flex:0 0 auto;background:var(--chumbo);padding:11px 14px;border-bottom:3px solid var(--ouro)}
+ .col.atrasados .colhead{background:#3a1410;border-bottom:3px solid var(--vermelho)}
+ .colhead .cd{font-size:11px;letter-spacing:1.5px;color:var(--ouro);font-weight:700}
+ .col.atrasados .colhead .cd{color:var(--vermelho)}
+ .colhead .cdt{font-size:21px;font-weight:700;line-height:1.1} .colhead .ccount{font-size:11px;color:#bdbdbd;margin-top:2px}
+ .cards{flex:1 1 auto;min-height:0;padding:12px;display:flex;flex-direction:column;gap:12px;overflow-y:scroll;scrollbar-gutter:stable}
+ .cards.dragover{outline:2px dashed var(--ouro);outline-offset:-5px;border-radius:10px}
+ .card{flex:0 0 auto;background:#fff;color:#1a1a1a;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab}
+ .card.dragging{opacity:.4}
+ .imgwrap{position:relative;background:#fff;width:100%;aspect-ratio:613/340;overflow:hidden;border-bottom:1px solid #eee}
+ .imgwrap a{display:block;width:100%;height:100%}
+ .imgwrap img{width:100%;height:100%;object-fit:contain;object-position:center} .noimg{display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:12px}
+ .imgwrap.failed{display:flex;align-items:center;justify-content:center;aspect-ratio:613/340}
+ .imgwrap.failed::after{content:'abrir no navegador para ver a folha';color:#b3261e;font-size:11px;text-align:center;padding:0 10px;line-height:1.3}
+ .cardtop{display:flex;align-items:center;gap:8px;padding:7px 9px;background:#0A0A0A}
+ .cardtop .osid{color:#fff;font-weight:800;font-size:14px;letter-spacing:.3px}
+ .badge{font-size:10px;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:5px;color:#0A0A0A}
+ .badge.premium{background:var(--prem)} .badge.essencial{background:var(--ess);color:#fff}
+ .info{padding:9px 11px 11px}
+ .entrega{font-size:13.5px;font-weight:600;color:#1a1a1a;line-height:1.3;padding:4px 8px;background:#f5f5f5;border-radius:6px}
+ .atraso{background:#fdecea;color:#b3261e;font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:5px;margin-bottom:6px;text-align:center}
+ .toprow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+ .osid{font-weight:800;font-size:14px}
+ .qtd{background:#0A0A0A;color:var(--ouro);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+ .card.essencial .qtd{color:var(--ess)}
+ .line{font-size:11.5px;color:#333;margin:3px 0;line-height:1.35}
+ .line .lbl{display:inline-block;min-width:52px;color:#999;font-weight:700;font-size:10px;text-transform:uppercase}
+ .obs{margin-top:6px;padding-top:6px;border-top:1px dashed #e0e0e0;font-size:11px;color:#7a3a00;font-style:italic}
+ .finbar{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;flex-wrap:wrap}
+ .finbar input{flex:1;min-width:240px;max-width:420px;background:#1c1c1c;border:1px solid #333;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px}
+ .finbar input::placeholder{color:#777}
+ .fbtn.ouro{background:var(--ouro);color:#0A0A0A;border-color:var(--ouro)}
+ .fincount{font-size:12px;color:#bbb} .fincount a{color:var(--ouro);cursor:pointer;text-decoration:underline}
+ .feitobtn{margin-top:8px;width:100%;background:#f3f3f3;color:#2e7d32;border:1px solid #cde9d3;border-radius:6px;padding:6px;font-size:11px;font-weight:700;cursor:pointer}
+ .feitobtn:hover{background:#2e7d32;color:#fff;border-color:#2e7d32}
+ ::-webkit-scrollbar{height:10px;width:9px} ::-webkit-scrollbar-thumb{background:#333;border-radius:5px}
+ .cards::-webkit-scrollbar{width:12px}
+ .cards::-webkit-scrollbar-track{background:#0e0e0e;border-radius:6px}
+ .cards::-webkit-scrollbar-thumb{background:#5f5f5f;border-radius:6px;border:2px solid #141414}
+ .cards::-webkit-scrollbar-thumb:hover{background:var(--ouro)}
+ .cards{scrollbar-color:#5f5f5f #0e0e0e}
+</style></head><body>
+<header>
+ <div><h1>QUADRO DE <b>URGÊNCIAS</b></h1><div class="sub">SeuBoné · semana 22/06–26/06 + atrasados · gerado em 26/06/2026</div></div>
+ <div class="spacer"></div>
+ <div class="stat alert">atrasados <b id="statAtras">78</b></div>
+ <div class="stat">na semana <b id="statTotal">149</b></div>
+ <div class="stat">Premium <b id="statP">108</b></div>
+ <div class="stat">Essencial <b id="statE">41</b></div>
+ <div class="filtros" id="linhagrp">
+  <button class="fbtn active" onclick="filtra('todos',this)">Todos</button>
+  <button class="fbtn" onclick="filtra('Premium',this)">Premium</button>
+  <button class="fbtn" onclick="filtra('Essencial',this)">Essencial</button>
+ </div>
+ <div class="filtros" id="sizegrp">
+  <button class="fbtn" onclick="setTam('p',this)">Folha P</button>
+  <button class="fbtn active" onclick="setTam('m',this)">M</button>
+  <button class="fbtn" onclick="setTam('g',this)">G</button>
+ </div>
+ <div class="finbar">
+  <input id="finbox" placeholder="IDs finalizados — cole ou digite (ex: 97437 97357) e clique tirar">
+  <button class="fbtn ouro" onclick="tirarBox()">✓ Tirar do quadro</button>
+  <span class="fincount"><b id="finN">0</b> tirados · <a onclick="limparFin()">restaurar todos</a></span>
+ </div>
+</header>
+<div class="board"><div class="col atrasados">
+  <div class="colhead"><div class="cd">⚠ ATRASADOS</div><div class="cdt">PPF vencido</div><div class="ccount">78 pedidos</div></div>
+  <div class="cards" data-day="atrasados"><div class="card essencial" draggable="true" data-uid="0" data-linha="Essencial" data-id="90844">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 90844</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9434c6c67a4a3823e069c9fb6284a4f2-Folha_1845671" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9434c6c67a4a3823e069c9fb6284a4f2-Folha_1845671" alt="OS 90844" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 10/03 · <b>108d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="90844" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="1" data-linha="Essencial" data-id="92085">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 92085</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/cf7e6caae98d8f09b3a88f20cb4c286a-Folha_1883616" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/cf7e6caae98d8f09b3a88f20cb4c286a-Folha_1883616" alt="OS 92085" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 24/03 · <b>94d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="92085" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="2" data-linha="Essencial" data-id="92802">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 92802</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/597f92708840593f44790435632ef1be-Folha_1905773" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/597f92708840593f44790435632ef1be-Folha_1905773" alt="OS 92802" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 03/04 · <b>84d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="92802" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="3" data-linha="Premium" data-id="84401">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 84401</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6a79ac83050701618b7b386cc7e38998-Folha_1671208" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6a79ac83050701618b7b386cc7e38998-Folha_1671208" alt="OS 84401" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 13/04 · <b>74d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="84401" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="4" data-linha="Essencial" data-id="93408">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 93408</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c0cea9ba501b0d1a2e691e1f37cdd46e-Folha_1928997" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c0cea9ba501b0d1a2e691e1f37cdd46e-Folha_1928997" alt="OS 93408" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/04 · <b>72d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="93408" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="5" data-linha="Essencial" data-id="94220">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 94220</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e47a673fa2ac227a65444f13fe40faff-Folha_1952574" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e47a673fa2ac227a65444f13fe40faff-Folha_1952574" alt="OS 94220" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 30/04 · <b>57d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="94220" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="6" data-linha="Premium" data-id="95231">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95231</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/96ca8d9225d6d5da771a03d3c27356a5-Folha_1967035" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/96ca8d9225d6d5da771a03d3c27356a5-Folha_1967035" alt="OS 95231" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 07/05 · <b>50d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Belém</div>
+        <button class="feitobtn" data-id="95231" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="7" data-linha="Essencial" data-id="94743">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 94743</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/4332aa011920300ebf5c4d32bb30df90-Folha_1959831" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/4332aa011920300ebf5c4d32bb30df90-Folha_1959831" alt="OS 94743" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 08/05 · <b>49d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Guarulhos</div>
+        <button class="feitobtn" data-id="94743" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="8" data-linha="Premium" data-id="95198">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95198</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/651652b62f5efd81796c53ad31645c84-Folha_1986222" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/651652b62f5efd81796c53ad31645c84-Folha_1986222" alt="OS 95198" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/05 · <b>38d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95198" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="9" data-linha="Premium" data-id="96014">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96014</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/a1df1d342cb131a88376230407a46a2b-Folha_2004895" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/a1df1d342cb131a88376230407a46a2b-Folha_2004895" alt="OS 96014" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 26/05 · <b>31d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96014" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="10" data-linha="Essencial" data-id="95761">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 95761</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e1271ca18ffd4f101749841b28006209-Folha_1994822" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e1271ca18ffd4f101749841b28006209-Folha_1994822" alt="OS 95761" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 27/05 · <b>30d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95761" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="11" data-linha="Premium" data-id="96120">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96120</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/417069c5a5790fc54ae7e4a516103f10-Folha_2006973" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/417069c5a5790fc54ae7e4a516103f10-Folha_2006973" alt="OS 96120" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 28/05 · <b>29d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96120" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="12" data-linha="Essencial" data-id="96023">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96023</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1f587d9769b3786ca95163b8dacb058c-Folha_2003338" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1f587d9769b3786ca95163b8dacb058c-Folha_2003338" alt="OS 96023" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 02/06 · <b>24d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96023" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="13" data-linha="Essencial" data-id="96177">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96177</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ce8ec1ec77958a24c4eb5da8fded5923-Folha_2008819" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ce8ec1ec77958a24c4eb5da8fded5923-Folha_2008819" alt="OS 96177" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 03/06 · <b>23d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96177" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="14" data-linha="Premium" data-id="95070">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95070</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ec93ef496125a6b6c9adcd2f1f9622b6-Folha_1942243" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ec93ef496125a6b6c9adcd2f1f9622b6-Folha_1942243" alt="OS 95070" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 04/06 · <b>22d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95070" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="16" data-linha="Premium" data-id="96402">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96402</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/25c727b870b6fe038d497c34a68e100e-Folha_2014333" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/25c727b870b6fe038d497c34a68e100e-Folha_2014333" alt="OS 96402" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 05/06 · <b>21d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96402" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="15" data-linha="Essencial" data-id="96723">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96723</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b5c2b1edfab3356375a3b8161f218bec-Folha_2023141" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b5c2b1edfab3356375a3b8161f218bec-Folha_2023141" alt="OS 96723" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 05/06 · <b>21d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96723" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="17" data-linha="Essencial" data-id="96364">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96364</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5d9b4ddfe6873de43452222502c4c69c-Folha_2013486" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5d9b4ddfe6873de43452222502c4c69c-Folha_2013486" alt="OS 96364" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 05/06 · <b>21d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96364" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="18" data-linha="Essencial" data-id="96500">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96500</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0615e365866b0f7e90b323d480892a1b-Folha_2018350" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0615e365866b0f7e90b323d480892a1b-Folha_2018350" alt="OS 96500" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 08/06 · <b>18d atrasado</b></div>
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="96500" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="19" data-linha="Essencial" data-id="96547">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96547</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/553e8a6d8054e7f0cf5110f8e4b8a40c-Folha_2020546" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/553e8a6d8054e7f0cf5110f8e4b8a40c-Folha_2020546" alt="OS 96547" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 09/06 · <b>17d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96547" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="21" data-linha="Premium" data-id="96415">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96415</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7928a2071a48b7b08d163985ee4ade69-Folha_2015928" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7928a2071a48b7b08d163985ee4ade69-Folha_2015928" alt="OS 96415" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 10/06 · <b>16d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96415" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="20" data-linha="Essencial" data-id="96592">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96592</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0552b60ba26a1f3da3db14099d5952f7-Folha_2022622" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0552b60ba26a1f3da3db14099d5952f7-Folha_2022622" alt="OS 96592" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 10/06 · <b>16d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96592" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="24" data-linha="Premium" data-id="97089">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97089</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9f7cdcf41dbe7ddbd34e16ef1fbb7122-Folha_2017019" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9f7cdcf41dbe7ddbd34e16ef1fbb7122-Folha_2017019" alt="OS 97089" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97089" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="25" data-linha="Premium" data-id="96788">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96788</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6543bdebae8483f4f7b4120ac66aa2df-Folha_2024599" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6543bdebae8483f4f7b4120ac66aa2df-Folha_2024599" alt="OS 96788" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96788" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="26" data-linha="Premium" data-id="96709">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96709</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/37fc376c2ed9311a3859ba32851ac7f0-Folha_2021809" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/37fc376c2ed9311a3859ba32851ac7f0-Folha_2021809" alt="OS 96709" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96709" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="22" data-linha="Essencial" data-id="96690">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96690</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e29b946ae1c5b726736cb48239829d84-Folha_2012692" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e29b946ae1c5b726736cb48239829d84-Folha_2012692" alt="OS 96690" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96690" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="23" data-linha="Essencial" data-id="96733">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96733</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5f0e77c9bde48fce5031bd336855d911-Folha_2022837" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5f0e77c9bde48fce5031bd336855d911-Folha_2022837" alt="OS 96733" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Fortaleza</div>
+        <button class="feitobtn" data-id="96733" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="27" data-linha="Essencial" data-id="96315">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96315</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0bcd2e093835534043624a281127ee9a-Folha_2021732" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0bcd2e093835534043624a281127ee9a-Folha_2021732" alt="OS 96315" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96315" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="28" data-linha="Essencial" data-id="96791">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96791</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8206ba31346527e99f77224047a8556b-Folha_2024949" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8206ba31346527e99f77224047a8556b-Folha_2024949" alt="OS 96791" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="96791" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="29" data-linha="Essencial" data-id="96754">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96754</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/fbb67e87cb7fc8793c9a92b0353e6488-Folha_2016893" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/fbb67e87cb7fc8793c9a92b0353e6488-Folha_2016893" alt="OS 96754" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 11/06 · <b>15d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96754" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="32" data-linha="Premium" data-id="97519">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97519</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/bf113b24f6f43ef5fe8ab15a3d46e8b7-Folha_2045623" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/bf113b24f6f43ef5fe8ab15a3d46e8b7-Folha_2045623" alt="OS 97519" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97519" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="33" data-linha="Premium" data-id="97587">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97587</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/363f2cc992712bc1abc17f507af15568-Folha_2044530" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/363f2cc992712bc1abc17f507af15568-Folha_2044530" alt="OS 97587" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Brasília</div>
+        <button class="feitobtn" data-id="97587" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="34" data-linha="Premium" data-id="97169">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97169</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/adc9443346901d1b460cf6232ad82f00-Folha_2035283" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/adc9443346901d1b460cf6232ad82f00-Folha_2035283" alt="OS 97169" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97169" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="35" data-linha="Premium" data-id="96880">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96880</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b5586f4a0f6ea6b41c39ed4a67279386-Folha_2027378" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b5586f4a0f6ea6b41c39ed4a67279386-Folha_2027378" alt="OS 96880" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96880" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="30" data-linha="Essencial" data-id="96826">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96826</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8e48196a350319a9783086666728f3b7-Folha_2025689" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8e48196a350319a9783086666728f3b7-Folha_2025689" alt="OS 96826" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96826" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="31" data-linha="Essencial" data-id="96822">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96822</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/85d400fce0bb741370496c8bd1697158-Folha_2027121" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/85d400fce0bb741370496c8bd1697158-Folha_2027121" alt="OS 96822" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96822" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="36" data-linha="Essencial" data-id="96718">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96718</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6c3751f71c1d3c6ee7a521ddcd64edc3-Folha_2021621" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6c3751f71c1d3c6ee7a521ddcd64edc3-Folha_2021621" alt="OS 96718" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 12/06 · <b>14d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96718" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="38" data-linha="Premium" data-id="97601">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97601</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/dfc19a059b05fa25bca4f5abf9b37cfa-Folha_2043392" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/dfc19a059b05fa25bca4f5abf9b37cfa-Folha_2043392" alt="OS 97601" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Viracopos</div>
+        <button class="feitobtn" data-id="97601" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="39" data-linha="Premium" data-id="96935">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96935</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0b3371f9183d360d2fe6013a9a73a42a-Folha_2029568" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0b3371f9183d360d2fe6013a9a73a42a-Folha_2029568" alt="OS 96935" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96935" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="42" data-linha="Premium" data-id="96545">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96545</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c5b8c5359616dc4c5de8fa3d02af1597-Folha_2019352" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c5b8c5359616dc4c5de8fa3d02af1597-Folha_2019352" alt="OS 96545" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96545" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="37" data-linha="Essencial" data-id="96918">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96918</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/37259c7d9e97cd4aa4fcd83409172413-Folha_2029203" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/37259c7d9e97cd4aa4fcd83409172413-Folha_2029203" alt="OS 96918" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Brasília</div>
+        <button class="feitobtn" data-id="96918" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="40" data-linha="Essencial" data-id="96924">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96924</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/fc66b992c9c9292febfe293a5c42b1cf-Folha_2029589" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/fc66b992c9c9292febfe293a5c42b1cf-Folha_2029589" alt="OS 96924" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96924" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="41" data-linha="Essencial" data-id="96891">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96891</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ff393c3b3bc776c7efa7d6ff49e1ba25-Folha_2028237" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ff393c3b3bc776c7efa7d6ff49e1ba25-Folha_2028237" alt="OS 96891" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 15/06 · <b>11d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96891" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="43" data-linha="Premium" data-id="96929">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96929</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/382b9adac82f6ca058088f85275dfdca-Folha_2029049" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/382b9adac82f6ca058088f85275dfdca-Folha_2029049" alt="OS 96929" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96929" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="44" data-linha="Premium" data-id="97002">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97002</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b79f187a4e2c154c1b8ea82e2bd64836-Folha_2028566" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b79f187a4e2c154c1b8ea82e2bd64836-Folha_2028566" alt="OS 97002" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97002" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="45" data-linha="Premium" data-id="96974">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96974</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/664265ab5bf18ed791655b7dbb853d99-Folha_2029642" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/664265ab5bf18ed791655b7dbb853d99-Folha_2029642" alt="OS 96974" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96974" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="46" data-linha="Essencial" data-id="96995">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96995</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/eb0f507a0b54fb4d71560df5695ea254-Folha_2031182" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/eb0f507a0b54fb4d71560df5695ea254-Folha_2031182" alt="OS 96995" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96995" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="47" data-linha="Essencial" data-id="97021">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97021</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d9216c095731ccba606da96a7a4adeb8-Folha_2031664" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d9216c095731ccba606da96a7a4adeb8-Folha_2031664" alt="OS 97021" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97021" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="48" data-linha="Essencial" data-id="96732">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96732</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9cd55cf6202d0e5c7ac2bc26949e0c1b-Folha_2023922" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9cd55cf6202d0e5c7ac2bc26949e0c1b-Folha_2023922" alt="OS 96732" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 16/06 · <b>10d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96732" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="50" data-linha="Premium" data-id="97134">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97134</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3f2069b163f511315cc6d0b55ac9e663-Folha_1973003" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3f2069b163f511315cc6d0b55ac9e663-Folha_1973003" alt="OS 97134" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97134" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="51" data-linha="Premium" data-id="97053">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97053</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c269eeb3d7ea217c37acaaea5c18448c-Folha_2024062" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c269eeb3d7ea217c37acaaea5c18448c-Folha_2024062" alt="OS 97053" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97053" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="52" data-linha="Premium" data-id="97583">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97583</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1d5ce57253cc85ab370fbe38ac78f7f0-Folha_2045515" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1d5ce57253cc85ab370fbe38ac78f7f0-Folha_2045515" alt="OS 97583" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97583" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="53" data-linha="Premium" data-id="97025">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97025</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/dbc61df1d2f9d2f8978790475e69dfcd-Folha_2031183" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/dbc61df1d2f9d2f8978790475e69dfcd-Folha_2031183" alt="OS 97025" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97025" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="54" data-linha="Premium" data-id="96585">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96585</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8b3db41df259e2c8c4be9d36aea48a35-Folha_2023009" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8b3db41df259e2c8c4be9d36aea48a35-Folha_2023009" alt="OS 96585" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96585" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="49" data-linha="Essencial" data-id="97131">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97131</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/662722ad666b41249dc0b03cc09544f5-Folha_2033945" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/662722ad666b41249dc0b03cc09544f5-Folha_2033945" alt="OS 97131" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97131" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="55" data-linha="Essencial" data-id="97065">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97065</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/cc0ea99d909aa031d131f9f35fe739cb-Folha_2033412" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/cc0ea99d909aa031d131f9f35fe739cb-Folha_2033412" alt="OS 97065" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Curitiba</div>
+        <button class="feitobtn" data-id="97065" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="56" data-linha="Essencial" data-id="97051">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97051</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/19e6d15858def9f8983538fedacb726d-Folha_2030470" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/19e6d15858def9f8983538fedacb726d-Folha_2030470" alt="OS 97051" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 17/06 · <b>9d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97051" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="57" data-linha="Premium" data-id="97678">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97678</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/a47a8169ec217882d901f03d6c68bd2c-Folha_2046904" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/a47a8169ec217882d901f03d6c68bd2c-Folha_2046904" alt="OS 97678" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 18/06 · <b>8d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97678" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="58" data-linha="Premium" data-id="97862">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97862</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6906384229b960a4b669f4e9bdfa8efe-Folha_2049600" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6906384229b960a4b669f4e9bdfa8efe-Folha_2049600" alt="OS 97862" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 18/06 · <b>8d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Congonhas</div>
+        <button class="feitobtn" data-id="97862" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="59" data-linha="Premium" data-id="97417">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97417</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f742a8b7f052210f94628c1e5ad7d20d-Folha_2042289" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f742a8b7f052210f94628c1e5ad7d20d-Folha_2042289" alt="OS 97417" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 18/06 · <b>8d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97417" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="60" data-linha="Premium" data-id="97155">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97155</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0926028b69c77dba9999f95f2153c4e6-Folha_2030582" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0926028b69c77dba9999f95f2153c4e6-Folha_2030582" alt="OS 97155" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 18/06 · <b>8d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97155" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="61" data-linha="Premium" data-id="97179">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97179</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/01be924962aec9fce75172c595816f96-Folha_2035499" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/01be924962aec9fce75172c595816f96-Folha_2035499" alt="OS 97179" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97179" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="62" data-linha="Premium" data-id="97039">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97039</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9dfb2af52cd8e9a638161149c968c9b5-Folha_2031963" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9dfb2af52cd8e9a638161149c968c9b5-Folha_2031963" alt="OS 97039" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97039" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="63" data-linha="Premium" data-id="97168">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97168</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/400f4351e5a246aa9dd390524307f464-Folha_2034875" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/400f4351e5a246aa9dd390524307f464-Folha_2034875" alt="OS 97168" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97168" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="64" data-linha="Premium" data-id="97198">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97198</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b6227f91b867dceff0b929e016543b4f-Folha_2036021" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b6227f91b867dceff0b929e016543b4f-Folha_2036021" alt="OS 97198" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97198" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="65" data-linha="Premium" data-id="97111">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97111</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/22a09ceebbe687856f0ee728103faeb1-Folha_2036406" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/22a09ceebbe687856f0ee728103faeb1-Folha_2036406" alt="OS 97111" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97111" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="66" data-linha="Premium" data-id="97114">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97114</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/824a4abdd1a30389edc2f5c103c20612-Folha_2036412" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/824a4abdd1a30389edc2f5c103c20612-Folha_2036412" alt="OS 97114" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97114" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="67" data-linha="Premium" data-id="97113">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97113</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6db3234e280f1015433746daf18fbc03-Folha_2036418" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6db3234e280f1015433746daf18fbc03-Folha_2036418" alt="OS 97113" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97113" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="68" data-linha="Premium" data-id="97420">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97420</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1a21661739ccc57507c75a86f3d20175-Folha_2041840" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1a21661739ccc57507c75a86f3d20175-Folha_2041840" alt="OS 97420" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97420" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="71" data-linha="Premium" data-id="97897">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97897</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f6bff72df1991e7fa1940d724b2845bf-Folha_2050638" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f6bff72df1991e7fa1940d724b2845bf-Folha_2050638" alt="OS 97897" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="97897" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="72" data-linha="Premium" data-id="98056">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98056</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ef93aef002df73fb18444b0cdc1f9f1e-Folha_2053887" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ef93aef002df73fb18444b0cdc1f9f1e-Folha_2053887" alt="OS 98056" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Congonhas</div>
+        <button class="feitobtn" data-id="98056" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="73" data-linha="Premium" data-id="98060">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98060</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3bd9f6eb96c45e4b76eefa860de02b2c-Folha_2050638" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3bd9f6eb96c45e4b76eefa860de02b2c-Folha_2050638" alt="OS 98060" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="98060" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="74" data-linha="Premium" data-id="98022">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98022</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/56a51b160b710aa92a054fdcaae9ca30-Folha_2050900" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/56a51b160b710aa92a054fdcaae9ca30-Folha_2050900" alt="OS 98022" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98022" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="76" data-linha="Premium" data-id="98084">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98084</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/fdb17797898f94138a5b73e1ea353808-Folha_2053834" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/fdb17797898f94138a5b73e1ea353808-Folha_2053834" alt="OS 98084" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98084" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="69" data-linha="Essencial" data-id="96628">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96628</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1dfb0211e5e3c8add2c5977d5a79e773-Folha_2035953" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1dfb0211e5e3c8add2c5977d5a79e773-Folha_2035953" alt="OS 96628" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96628" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="70" data-linha="Essencial" data-id="97207">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97207</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/dcc53701567a3453dbac4f29c64d2243-Folha_2035724" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/dcc53701567a3453dbac4f29c64d2243-Folha_2035724" alt="OS 97207" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97207" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="75" data-linha="Essencial" data-id="97180">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97180</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/19ae8cadca72bf3369f72292f111909d-Folha_2035584" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/19ae8cadca72bf3369f72292f111909d-Folha_2035584" alt="OS 97180" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97180" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="77" data-linha="Essencial" data-id="97141">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97141</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7cda4f030dc173b8721348ac2e421186-Folha_2006214" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7cda4f030dc173b8721348ac2e421186-Folha_2006214" alt="OS 97141" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97141" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+</div><div class="col">
+      <div class="colhead"><div class="cd">SEGUNDA</div><div class="cdt">22/06</div><div class="ccount">11 pedidos</div></div>
+      <div class="cards" data-day="2026-06-22"><div class="card premium" draggable="true" data-uid="78" data-linha="Premium" data-id="94864">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 94864</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c4a89ebdc85246a11518dc65583a4cbb-Folha_1972661" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c4a89ebdc85246a11518dc65583a4cbb-Folha_1972661" alt="OS 94864" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="94864" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="79" data-linha="Premium" data-id="97326">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97326</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9524c042f5b299d8dee748bb7954ec33-Folha_2039911" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9524c042f5b299d8dee748bb7954ec33-Folha_2039911" alt="OS 97326" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97326" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="80" data-linha="Premium" data-id="95533">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95533</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8311501bf76bf103ab3b71c92356f3fc-Folha_1986110" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8311501bf76bf103ab3b71c92356f3fc-Folha_1986110" alt="OS 95533" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95533" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="81" data-linha="Premium" data-id="97191">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97191</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b0cdc5252e6ec285d39a76516b093f54-Folha_2030866" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b0cdc5252e6ec285d39a76516b093f54-Folha_2030866" alt="OS 97191" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97191" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="82" data-linha="Premium" data-id="97319">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97319</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/848b0190471b984cef526b2850f65680-Folha_2038625" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/848b0190471b984cef526b2850f65680-Folha_2038625" alt="OS 97319" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97319" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="83" data-linha="Premium" data-id="97238">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97238</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/41051b8a61560aaa804a5a354558fb59-Folha_2035803" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/41051b8a61560aaa804a5a354558fb59-Folha_2035803" alt="OS 97238" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97238" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="84" data-linha="Premium" data-id="97275">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97275</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/da363ed7a5e6e7442651b7fe92273d40-Folha_2027137" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/da363ed7a5e6e7442651b7fe92273d40-Folha_2027137" alt="OS 97275" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Belém</div>
+        <button class="feitobtn" data-id="97275" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="85" data-linha="Premium" data-id="95216">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95216</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/05e52c9cf2b4ccfe2a6e28a39abe5836-Folha_2038883" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/05e52c9cf2b4ccfe2a6e28a39abe5836-Folha_2038883" alt="OS 95216" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95216" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="88" data-linha="Premium" data-id="98158">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98158</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/abfe52a9704f79af414be943d6a3f328-Folha_2055748" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/abfe52a9704f79af414be943d6a3f328-Folha_2055748" alt="OS 98158" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Guarulhos</div>
+        <button class="feitobtn" data-id="98158" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="86" data-linha="Essencial" data-id="97126">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97126</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6bc8359ca0df5006f86112f96727e599-Folha_2033700" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6bc8359ca0df5006f86112f96727e599-Folha_2033700" alt="OS 97126" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97126" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="87" data-linha="Essencial" data-id="97246">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97246</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ba58d0d7c0a4c658a150bb1f9d758aa1-Folha_2022301" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ba58d0d7c0a4c658a150bb1f9d758aa1-Folha_2022301" alt="OS 97246" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97246" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">TERÇA</div><div class="cdt">23/06</div><div class="ccount">12 pedidos</div></div>
+      <div class="cards" data-day="2026-06-23"><div class="card premium" draggable="true" data-uid="90" data-linha="Premium" data-id="97272">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97272</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d793f470c88b1506a7bfa8d6237f28ea-Folha_2039411" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d793f470c88b1506a7bfa8d6237f28ea-Folha_2039411" alt="OS 97272" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97272" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="91" data-linha="Premium" data-id="97373">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97373</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ba4c2a6405bd942477c91215c20c2d4e-Folha_2028048" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ba4c2a6405bd942477c91215c20c2d4e-Folha_2028048" alt="OS 97373" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97373" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="92" data-linha="Premium" data-id="97394">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97394</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/a7e7beea327d53d389bbfc6267499b35-Folha_2040578" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/a7e7beea327d53d389bbfc6267499b35-Folha_2040578" alt="OS 97394" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97394" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="93" data-linha="Premium" data-id="97395">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97395</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9a96090f485d95e0f850c741538ad5a6-Folha_2041983" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9a96090f485d95e0f850c741538ad5a6-Folha_2041983" alt="OS 97395" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97395" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="94" data-linha="Premium" data-id="97396">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97396</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8dbe0831a5b9d65929c571aff5c456cc-Folha_2041976" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8dbe0831a5b9d65929c571aff5c456cc-Folha_2041976" alt="OS 97396" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97396" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="95" data-linha="Premium" data-id="97362">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97362</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/790d2bf88060f26cc25b23e7d04be98f-Folha_2032807" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/790d2bf88060f26cc25b23e7d04be98f-Folha_2032807" alt="OS 97362" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97362" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="96" data-linha="Premium" data-id="97308">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97308</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ec4eb096c4f84fc3bae0e93259f7e1bb-Folha_2039995" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ec4eb096c4f84fc3bae0e93259f7e1bb-Folha_2039995" alt="OS 97308" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97308" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="97" data-linha="Premium" data-id="97355">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97355</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0142f0cd4e0181864e7e700da52a0b63-Folha_2034567" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0142f0cd4e0181864e7e700da52a0b63-Folha_2034567" alt="OS 97355" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97355" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="98" data-linha="Premium" data-id="97354">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97354</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/4756a21d6ac49bc6c2559f42c8e5bfc5-Folha_2038994" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/4756a21d6ac49bc6c2559f42c8e5bfc5-Folha_2038994" alt="OS 97354" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97354" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="99" data-linha="Premium" data-id="84872">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 84872</span></div>
+      <div class="imgwrap"><div class="noimg">sem folha</div></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="84872" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="89" data-linha="Essencial" data-id="97407">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97407</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b50d36baedec26efa21a5586dcca740a-Folha_2042186" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b50d36baedec26efa21a5586dcca740a-Folha_2042186" alt="OS 97407" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="97407" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="100" data-linha="Essencial" data-id="97382">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97382</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f72b67bebfe47637b52b99bd3a72c41f-Folha_2036460" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f72b67bebfe47637b52b99bd3a72c41f-Folha_2036460" alt="OS 97382" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97382" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUARTA</div><div class="cdt">24/06</div><div class="ccount">20 pedidos</div></div>
+      <div class="cards" data-day="2026-06-24"><div class="card premium" draggable="true" data-uid="101" data-linha="Premium" data-id="97437">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97437</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/02ab98ee016455c1d265d625267dce93-Folha_2036530" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/02ab98ee016455c1d265d625267dce93-Folha_2036530" alt="OS 97437" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="97437" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="102" data-linha="Premium" data-id="97357">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97357</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/794fe5e5c46b4138d5d5ed3175fb496f-Folha_2041225" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/794fe5e5c46b4138d5d5ed3175fb496f-Folha_2041225" alt="OS 97357" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Guarulhos</div>
+        <button class="feitobtn" data-id="97357" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="103" data-linha="Premium" data-id="97472">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97472</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/57cd8a48205e10e690a3c185197538f9-Folha_2042088" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/57cd8a48205e10e690a3c185197538f9-Folha_2042088" alt="OS 97472" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Macéio</div>
+        <button class="feitobtn" data-id="97472" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="104" data-linha="Premium" data-id="97488">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97488</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6226456ef9c33c426fb03d862bc43d25-Folha_2039566" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6226456ef9c33c426fb03d862bc43d25-Folha_2039566" alt="OS 97488" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Salvador</div>
+        <button class="feitobtn" data-id="97488" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="105" data-linha="Premium" data-id="97467">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97467</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/983909973957570bbbc2943924b9b6ea-Folha_2043408" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/983909973957570bbbc2943924b9b6ea-Folha_2043408" alt="OS 97467" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Brasília</div>
+        <button class="feitobtn" data-id="97467" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="106" data-linha="Premium" data-id="97438">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97438</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/dfe7bced2d2ee9b17d41693b52c2c154-Folha_2043301" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/dfe7bced2d2ee9b17d41693b52c2c154-Folha_2043301" alt="OS 97438" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Congonhas</div>
+        <button class="feitobtn" data-id="97438" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="107" data-linha="Premium" data-id="97459">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97459</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8301342fc68ecaf92048146083883d63-Folha_2043407" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8301342fc68ecaf92048146083883d63-Folha_2043407" alt="OS 97459" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97459" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="108" data-linha="Premium" data-id="97445">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97445</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/889fc076ec81433e96b38d0af88af52c-Folha_2043172" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/889fc076ec81433e96b38d0af88af52c-Folha_2043172" alt="OS 97445" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97445" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="109" data-linha="Premium" data-id="96702">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96702</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/90718bb598fdcf86009d8e68c78fd31e-Folha_2023088" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/90718bb598fdcf86009d8e68c78fd31e-Folha_2023088" alt="OS 96702" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96702" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="110" data-linha="Premium" data-id="96746">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96746</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3497f6097520f54caa63033bc9b4a1ab-Folha_2024912" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3497f6097520f54caa63033bc9b4a1ab-Folha_2024912" alt="OS 96746" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96746" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="111" data-linha="Premium" data-id="96810">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96810</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e80ddcfe5f75cd96396168c6d5516d3c-Folha_2025085" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e80ddcfe5f75cd96396168c6d5516d3c-Folha_2025085" alt="OS 96810" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96810" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="112" data-linha="Premium" data-id="97422">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97422</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5710b63ae362d48f6b9b5da703865d04-Folha_2042569" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5710b63ae362d48f6b9b5da703865d04-Folha_2042569" alt="OS 97422" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97422" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="113" data-linha="Premium" data-id="97392">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97392</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/29bf70f639eafc102104141ac88f7601-Folha_2041963" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/29bf70f639eafc102104141ac88f7601-Folha_2041963" alt="OS 97392" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97392" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="114" data-linha="Premium" data-id="97293">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97293</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/34966d888ee5a5f2ffc09780e24bf80a-Folha_2039684" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/34966d888ee5a5f2ffc09780e24bf80a-Folha_2039684" alt="OS 97293" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97293" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="115" data-linha="Premium" data-id="97443">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97443</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3e7627308d5a4d2870813f8e18b44e33-Folha_2042006" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3e7627308d5a4d2870813f8e18b44e33-Folha_2042006" alt="OS 97443" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97443" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="116" data-linha="Premium" data-id="97427">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97427</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/17ed26848b43b5394b941c862dad2ba1-Folha_2041378" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/17ed26848b43b5394b941c862dad2ba1-Folha_2041378" alt="OS 97427" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97427" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="117" data-linha="Premium" data-id="97476">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97476</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c356e06b4d06b6e0f78cfd0f2e22e1bb-Folha_2042130" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c356e06b4d06b6e0f78cfd0f2e22e1bb-Folha_2042130" alt="OS 97476" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97476" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="118" data-linha="Premium" data-id="96294">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96294</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6fadcf5180ca021228653115faeada72-Folha_2042841" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6fadcf5180ca021228653115faeada72-Folha_2042841" alt="OS 96294" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="96294" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="119" data-linha="Premium" data-id="90195">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 90195</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/220509c4a0ba6cda45d53cfe9b645ebe-Folha_2042744" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/220509c4a0ba6cda45d53cfe9b645ebe-Folha_2042744" alt="OS 90195" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="90195" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="120" data-linha="Essencial" data-id="97464">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97464</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/62ca1b0e71f60311d6dca907383882f2-Folha_2044007" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/62ca1b0e71f60311d6dca907383882f2-Folha_2044007" alt="OS 97464" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97464" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUINTA</div><div class="cdt">25/06</div><div class="ccount">16 pedidos</div></div>
+      <div class="cards" data-day="2026-06-25"><div class="card premium" draggable="true" data-uid="121" data-linha="Premium" data-id="97479">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97479</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5b0f733f0d31fa302f57395a652aaa1c-Folha_2043962" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5b0f733f0d31fa302f57395a652aaa1c-Folha_2043962" alt="OS 97479" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97479" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="122" data-linha="Premium" data-id="97547">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97547</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/93b213344343e8cb785a1c95c117e2e5-Folha_2045448" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/93b213344343e8cb785a1c95c117e2e5-Folha_2045448" alt="OS 97547" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Guarulhos</div>
+        <button class="feitobtn" data-id="97547" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="123" data-linha="Premium" data-id="97487">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97487</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/595fd69af62462c9807f5f2b452b859b-Folha_2012158" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/595fd69af62462c9807f5f2b452b859b-Folha_2012158" alt="OS 97487" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97487" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="124" data-linha="Premium" data-id="97313">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97313</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/da0f60a0e6084b7166a89bbd45729078-Folha_2022404" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/da0f60a0e6084b7166a89bbd45729078-Folha_2022404" alt="OS 97313" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97313" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="125" data-linha="Premium" data-id="97404">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97404</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/bcd501e0ec0d2d08cc1c4e6080dab59b-Folha_2042159" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/bcd501e0ec0d2d08cc1c4e6080dab59b-Folha_2042159" alt="OS 97404" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97404" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="126" data-linha="Premium" data-id="96881">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96881</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ca9193155a637eb882d2c5e65e7ac929-Folha_2045773" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ca9193155a637eb882d2c5e65e7ac929-Folha_2045773" alt="OS 96881" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96881" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="127" data-linha="Premium" data-id="97370">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97370</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8b1ab316e1b3b0821181075aa3fa5039-Folha_2043656" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8b1ab316e1b3b0821181075aa3fa5039-Folha_2043656" alt="OS 97370" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Campinas</div>
+        <button class="feitobtn" data-id="97370" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="128" data-linha="Premium" data-id="97529">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97529</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/48f447fbf3bdc67f2b10c9d64bd0730e-Folha_2042960" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/48f447fbf3bdc67f2b10c9d64bd0730e-Folha_2042960" alt="OS 97529" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97529" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="129" data-linha="Premium" data-id="97512">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97512</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/93e178e85887855a8caab4c4269771a7-Folha_2041531" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/93e178e85887855a8caab4c4269771a7-Folha_2041531" alt="OS 97512" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97512" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="130" data-linha="Premium" data-id="97586">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97586</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/90527e8226bdcd192d9a6edd5e4299aa-Folha_2045714" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/90527e8226bdcd192d9a6edd5e4299aa-Folha_2045714" alt="OS 97586" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97586" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="131" data-linha="Premium" data-id="97523">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97523</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8306ea327dec462c57e5a0a84aac7f90-Folha_2040793" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8306ea327dec462c57e5a0a84aac7f90-Folha_2040793" alt="OS 97523" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97523" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="132" data-linha="Premium" data-id="97912">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97912</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/a6aedba753b713e12898a57592190367-Folha_2060828" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/a6aedba753b713e12898a57592190367-Folha_2060828" alt="OS 97912" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="97912" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="133" data-linha="Premium" data-id="94796">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 94796</span></div>
+      <div class="imgwrap"><div class="noimg">sem folha</div></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="94796" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="135" data-linha="Premium" data-id="98234">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98234</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c7a6856f334ffab57bd6f85de05f7296-Folha_2057647" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c7a6856f334ffab57bd6f85de05f7296-Folha_2057647" alt="OS 98234" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98234" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="136" data-linha="Premium" data-id="98230">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98230</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/457d319fcde3a698fe92175679d467e8-Folha_2056441" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/457d319fcde3a698fe92175679d467e8-Folha_2056441" alt="OS 98230" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98230" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="134" data-linha="Essencial" data-id="97531">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97531</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3d67ba29eb0f321a476fd43e828cfe89-Folha_2044748" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3d67ba29eb0f321a476fd43e828cfe89-Folha_2044748" alt="OS 97531" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97531" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col hoje">
+      <div class="colhead"><div class="cd">SEXTA</div><div class="cdt">26/06</div><div class="ccount">12 pedidos</div></div>
+      <div class="cards" data-day="2026-06-26"><div class="card premium" draggable="true" data-uid="137" data-linha="Premium" data-id="95730">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 95730</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3225aaf429a47db124b08401e47563b5-Folha_2030588" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3225aaf429a47db124b08401e47563b5-Folha_2030588" alt="OS 95730" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="95730" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="138" data-linha="Premium" data-id="97936">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97936</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/249121911b3c36623a5b416cfa174ea4-Folha_2051034" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/249121911b3c36623a5b416cfa174ea4-Folha_2051034" alt="OS 97936" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto do Galeão</div>
+        <button class="feitobtn" data-id="97936" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="139" data-linha="Premium" data-id="97528">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97528</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/af3e26852c03ea3b599d48e08d05799d-Folha_2046243" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/af3e26852c03ea3b599d48e08d05799d-Folha_2046243" alt="OS 97528" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97528" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="140" data-linha="Premium" data-id="97936">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97936</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/249121911b3c36623a5b416cfa174ea4-Folha_2051034" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/249121911b3c36623a5b416cfa174ea4-Folha_2051034" alt="OS 97936" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto do Galeão</div>
+        <button class="feitobtn" data-id="97936" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="141" data-linha="Premium" data-id="98358">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98358</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1c6f67055fbaad50ab83538328af38e8-Folha_2052019" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1c6f67055fbaad50ab83538328af38e8-Folha_2052019" alt="OS 98358" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto de Ribeirão Preto</div>
+        <button class="feitobtn" data-id="98358" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="142" data-linha="Premium" data-id="96584">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96584</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/392565b6015ac5b41c7cc60e80d7fd38-Folha_2005990" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/392565b6015ac5b41c7cc60e80d7fd38-Folha_2005990" alt="OS 96584" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96584" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="143" data-linha="Premium" data-id="98106">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98106</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/05033fc30a68d2aa6f0474767e979a70-Folha_1906159" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/05033fc30a68d2aa6f0474767e979a70-Folha_1906159" alt="OS 98106" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98106" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="144" data-linha="Premium" data-id="98264">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98264</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/44b67d5ea6680c7e2d437ee686ec946c-Folha_2061096" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/44b67d5ea6680c7e2d437ee686ec946c-Folha_2061096" alt="OS 98264" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98264" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="145" data-linha="Premium" data-id="98403">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98403</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7ba01742fbd5459630b57f9b1ff47712-Folha_2064360" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7ba01742fbd5459630b57f9b1ff47712-Folha_2064360" alt="OS 98403" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98403" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="146" data-linha="Premium" data-id="98399">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98399</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/71ca82028b239c14c7c263e48d317598-Folha_2061096" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/71ca82028b239c14c7c263e48d317598-Folha_2061096" alt="OS 98399" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98399" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="147" data-linha="Premium" data-id="98480">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98480</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5a3d66b1d6b1d55a9ea8b7787ac27ab6-Folha_2065335" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5a3d66b1d6b1d55a9ea8b7787ac27ab6-Folha_2065335" alt="OS 98480" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="98480" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="148" data-linha="Premium" data-id="97711">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97711</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9443b536d76f654b6b4197c87608be23-Folha_2047787" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9443b536d76f654b6b4197c87608be23-Folha_2047787" alt="OS 97711" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97711" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div></div>
+<script>
+var GEN='2026-06-26';
+function lsGet(k,def){try{return JSON.parse(localStorage.getItem(k)||def)}catch(e){return JSON.parse(def)}}
+function getFin(){return new Set(lsGet('quadro_fin_'+GEN,'[]'))}
+function saveFin(){try{localStorage.setItem('quadro_fin_'+GEN,JSON.stringify([...finSet]))}catch(e){}}
+var finSet=getFin();
+var moves=lsGet('quadro_moves_'+GEN,'{}');
+function saveMoves(){try{localStorage.setItem('quadro_moves_'+GEN,JSON.stringify(moves))}catch(e){}}
+var curLinha='todos';
+function render(){
+ document.querySelectorAll('.card').forEach(function(c){
+  var vis=(curLinha==='todos'||c.dataset.linha===curLinha)&&!finSet.has(c.dataset.id);
+  c.style.display=vis?'':'none';
+ });
+ document.querySelectorAll('.col').forEach(function(col){
+  var n=[].slice.call(col.querySelectorAll('.card')).filter(function(c){return !finSet.has(c.dataset.id);}).length;
+  var e=col.querySelector('.ccount'); if(e) e.textContent=n+' pedidos';
+ });
+ var ativos=[].slice.call(document.querySelectorAll('.card')).filter(function(c){return !finSet.has(c.dataset.id);});
+ document.getElementById('statTotal').textContent=ativos.length;
+ document.getElementById('statP').textContent=ativos.filter(function(c){return c.dataset.linha==='Premium';}).length;
+ document.getElementById('statE').textContent=ativos.filter(function(c){return c.dataset.linha==='Essencial';}).length;
+ document.getElementById('statAtras').textContent=[].slice.call(document.querySelectorAll('.col.atrasados .card')).filter(function(c){return !finSet.has(c.dataset.id);}).length;
+ document.getElementById('finN').textContent=finSet.size;
+}
+function filtra(l,btn){curLinha=l;document.querySelectorAll('#linhagrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');render();}
+function setTam(s,btn){var w={p:'340px',m:'440px',g:'600px'}[s];document.documentElement.style.setProperty('--colw',w);document.querySelectorAll('#sizegrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+function tirarBox(){var v=document.getElementById('finbox').value;v.split(/[^0-9]+/).filter(Boolean).forEach(function(i){finSet.add(i);});document.getElementById('finbox').value='';saveFin();render();}
+function feito(btn){finSet.add(btn.dataset.id);saveFin();render();}
+function limparFin(){if(confirm('Trazer todos os pedidos de volta ao quadro?')){finSet=new Set();saveFin();render();}}
+function applyMoves(){Object.keys(moves).forEach(function(uid){var c=document.querySelector('.card[data-uid="'+uid+'"]');var t=document.querySelector('.cards[data-day="'+moves[uid]+'"]');if(c&&t)t.appendChild(c);});}
+var dragUid=null;
+function initDrag(){
+ document.querySelectorAll('.card').forEach(function(c){
+  c.addEventListener('dragstart',function(e){dragUid=c.dataset.uid;c.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+  c.addEventListener('dragend',function(){c.classList.remove('dragging');});
+ });
+ document.querySelectorAll('.cards').forEach(function(z){
+  z.addEventListener('dragover',function(e){e.preventDefault();z.classList.add('dragover');});
+  z.addEventListener('dragleave',function(){z.classList.remove('dragover');});
+  z.addEventListener('drop',function(e){e.preventDefault();z.classList.remove('dragover');var c=document.querySelector('.card[data-uid="'+dragUid+'"]');if(c){z.appendChild(c);moves[dragUid]=z.dataset.day;saveMoves();render();}});
+ });
+}
+document.addEventListener('DOMContentLoaded',function(){applyMoves();initDrag();render();});
+</script></body></html>
