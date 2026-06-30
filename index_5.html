@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quadro de Urgências — SeuBoné</title>
+<meta http-equiv="refresh" content="900">
+<style>
+ :root{--ouro:#D4A017;--chumbo:#3A3A3A;--preto:#0A0A0A;--prem:#D4A017;--ess:#2E9C8E;--vermelho:#E0533D;--colw:440px;--imgh:250px}
+ *{box-sizing:border-box;margin:0;padding:0}
+ html,body{height:100%}
+ body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--preto);color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+ header{flex:0 0 auto;background:linear-gradient(180deg,#111,#0A0A0A);border-bottom:2px solid var(--ouro);padding:14px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+ header h1{font-size:19px;letter-spacing:.5px} header h1 b{color:var(--ouro)}
+ .sub{color:#9a9a9a;font-size:12px;margin-top:2px}
+ .spacer{flex:1}
+ .stat{background:#1c1c1c;border:1px solid #2c2c2c;border-radius:10px;padding:6px 12px;font-size:12px;color:#ccc} .stat b{color:#fff;font-size:15px}
+ .stat.alert b{color:var(--vermelho)}
+ .filtros{display:flex;gap:8px}
+ .fbtn{background:#1c1c1c;border:1px solid #333;color:#ccc;padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600}
+ .fbtn.active{background:var(--ouro);color:#0A0A0A;border-color:var(--ouro)}
+ .board{flex:1;min-height:0;display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:16px 22px;align-items:stretch}
+ .col{flex:0 0 var(--colw);display:flex;flex-direction:column;min-height:0;background:#141414;border:1px solid #242424;border-radius:14px;overflow:hidden}
+ .col.atrasados{flex:0 0 var(--colw);border:1px solid #5a2018}
+ .col.hoje{border:1px solid var(--ouro);box-shadow:0 0 0 1px var(--ouro)}
+ .col.hoje .colhead{background:#4a3a10}
+ .colhead{flex:0 0 auto;background:var(--chumbo);padding:11px 14px;border-bottom:3px solid var(--ouro)}
+ .col.atrasados .colhead{background:#3a1410;border-bottom:3px solid var(--vermelho)}
+ .colhead .cd{font-size:11px;letter-spacing:1.5px;color:var(--ouro);font-weight:700}
+ .col.atrasados .colhead .cd{color:var(--vermelho)}
+ .colhead .cdt{font-size:21px;font-weight:700;line-height:1.1} .colhead .ccount{font-size:11px;color:#bdbdbd;margin-top:2px}
+ .cards{flex:1 1 auto;min-height:0;padding:12px;display:flex;flex-direction:column;gap:12px;overflow-y:scroll;scrollbar-gutter:stable}
+ .cards.dragover{outline:2px dashed var(--ouro);outline-offset:-5px;border-radius:10px}
+ .card{flex:0 0 auto;background:#fff;color:#1a1a1a;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:grab}
+ .card.dragging{opacity:.4}
+ .imgwrap{position:relative;background:#fff;width:100%;aspect-ratio:613/340;overflow:hidden;border-bottom:1px solid #eee}
+ .imgwrap a{display:block;width:100%;height:100%}
+ .imgwrap img{width:100%;height:100%;object-fit:contain;object-position:center} .noimg{display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:12px}
+ .imgwrap.failed{display:flex;align-items:center;justify-content:center;aspect-ratio:613/340}
+ .imgwrap.failed::after{content:'abrir no navegador para ver a folha';color:#b3261e;font-size:11px;text-align:center;padding:0 10px;line-height:1.3}
+ .cardtop{display:flex;align-items:center;gap:8px;padding:7px 9px;background:#0A0A0A}
+ .cardtop .osid{color:#fff;font-weight:800;font-size:14px;letter-spacing:.3px}
+ .badge{font-size:10px;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:5px;color:#0A0A0A}
+ .badge.premium{background:var(--prem)} .badge.essencial{background:var(--ess);color:#fff}
+ .info{padding:9px 11px 11px}
+ .entrega{font-size:13.5px;font-weight:600;color:#1a1a1a;line-height:1.3;padding:4px 8px;background:#f5f5f5;border-radius:6px}
+ .atraso{background:#fdecea;color:#b3261e;font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:5px;margin-bottom:6px;text-align:center}
+ .toprow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+ .osid{font-weight:800;font-size:14px}
+ .qtd{background:#0A0A0A;color:var(--ouro);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+ .card.essencial .qtd{color:var(--ess)}
+ .line{font-size:11.5px;color:#333;margin:3px 0;line-height:1.35}
+ .line .lbl{display:inline-block;min-width:52px;color:#999;font-weight:700;font-size:10px;text-transform:uppercase}
+ .obs{margin-top:6px;padding-top:6px;border-top:1px dashed #e0e0e0;font-size:11px;color:#7a3a00;font-style:italic}
+ .finbar{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;flex-wrap:wrap}
+ .finbar input{flex:1;min-width:240px;max-width:420px;background:#1c1c1c;border:1px solid #333;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px}
+ .finbar input.buscainput{flex:0 0 auto;min-width:180px;max-width:220px;border-color:var(--ouro);background:#241f10}
+ .finbar input::placeholder{color:#777}
+ .fbtn.ouro{background:var(--ouro);color:#0A0A0A;border-color:var(--ouro)}
+ .fincount{font-size:12px;color:#bbb} .fincount a{color:var(--ouro);cursor:pointer;text-decoration:underline}
+ .feitobtn{margin-top:8px;width:100%;background:#f3f3f3;color:#2e7d32;border:1px solid #cde9d3;border-radius:6px;padding:6px;font-size:11px;font-weight:700;cursor:pointer}
+ .feitobtn:hover{background:#2e7d32;color:#fff;border-color:#2e7d32}
+ ::-webkit-scrollbar{height:10px;width:9px} ::-webkit-scrollbar-thumb{background:#333;border-radius:5px}
+ .cards::-webkit-scrollbar{width:12px}
+ .cards::-webkit-scrollbar-track{background:#0e0e0e;border-radius:6px}
+ .cards::-webkit-scrollbar-thumb{background:#5f5f5f;border-radius:6px;border:2px solid #141414}
+ .cards::-webkit-scrollbar-thumb:hover{background:var(--ouro)}
+ .cards{scrollbar-color:#5f5f5f #0e0e0e}
+</style></head><body>
+<header>
+ <div><h1>QUADRO DE <b>URGÊNCIAS</b></h1><div class="sub">SeuBoné · semana 29/06–03/07 + atrasados · gerado em 30/06/2026</div></div>
+ <div class="spacer"></div>
+ <div class="stat alert">atrasados <b id="statAtras">4</b></div>
+ <div class="stat">na semana <b id="statTotal">21</b></div>
+ <div class="stat">Premium <b id="statP">12</b></div>
+ <div class="stat">Essencial <b id="statE">9</b></div>
+ <div class="filtros" id="linhagrp">
+  <button class="fbtn active" onclick="filtra('todos',this)">Todos</button>
+  <button class="fbtn" onclick="filtra('Premium',this)">Premium</button>
+  <button class="fbtn" onclick="filtra('Essencial',this)">Essencial</button>
+ </div>
+ <div class="filtros" id="sizegrp">
+  <button class="fbtn" onclick="setTam('p',this)">Folha P</button>
+  <button class="fbtn active" onclick="setTam('m',this)">M</button>
+  <button class="fbtn" onclick="setTam('g',this)">G</button>
+ </div>
+ <div class="finbar">
+  <input id="busca" class="buscainput" inputmode="numeric" placeholder="🔍 Buscar OS por ID" oninput="buscar(this.value)">
+  <input id="finbox" placeholder="IDs finalizados — cole ou digite (ex: 97437 97357) e clique tirar">
+  <button class="fbtn ouro" onclick="tirarBox()">✓ Tirar do quadro</button>
+  <button class="fbtn" onclick="copiarFin()">📋 Copiar finalizados</button>
+  <span class="fincount"><b id="finN">0</b> tirados · <a onclick="limparFin()">restaurar todos</a></span>
+ </div>
+</header>
+<div class="board"><div class="col atrasados">
+  <div class="colhead"><div class="cd">⚠ ATRASADOS</div><div class="cdt">PPF vencido</div><div class="ccount">4 pedidos</div></div>
+  <div class="cards" data-day="atrasados"><div class="card essencial" draggable="true" data-uid="77" data-linha="Essencial" data-id="97141">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97141</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7cda4f030dc173b8721348ac2e421186-Folha_2006214" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7cda4f030dc173b8721348ac2e421186-Folha_2006214" alt="OS 97141" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 19/06 · <b>11d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97141" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="100" data-linha="Essencial" data-id="97382">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97382</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f72b67bebfe47637b52b99bd3a72c41f-Folha_2036460" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f72b67bebfe47637b52b99bd3a72c41f-Folha_2036460" alt="OS 97382" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 23/06 · <b>7d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97382" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="142" data-linha="Premium" data-id="98358">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98358</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1c6f67055fbaad50ab83538328af38e8-Folha_2052019" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1c6f67055fbaad50ab83538328af38e8-Folha_2052019" alt="OS 98358" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 26/06 · <b>4d atrasado</b></div>
+        <div class="entrega">✈ Aeroporto de Ribeirão Preto</div>
+        <button class="feitobtn" data-id="98358" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="146" data-linha="Premium" data-id="98399">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98399</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/71ca82028b239c14c7c263e48d317598-Folha_2061096" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/71ca82028b239c14c7c263e48d317598-Folha_2061096" alt="OS 98399" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        <div class="atraso">PPF 26/06 · <b>4d atrasado</b></div>
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98399" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+</div><div class="col">
+      <div class="colhead"><div class="cd">SEGUNDA</div><div class="cdt">29/06</div><div class="ccount">4 pedidos</div></div>
+      <div class="cards" data-day="2026-06-29"><div class="card premium" draggable="true" data-uid="167" data-linha="Premium" data-id="98582">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98582</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/999fd69909579cf17e85e2defd86a7a0-Folha_2068098" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/999fd69909579cf17e85e2defd86a7a0-Folha_2068098" alt="OS 98582" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98582" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="168" data-linha="Premium" data-id="93385">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 93385</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/da1da5a2f1a5af51d602807a539fa66c-Folha_2068075" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/da1da5a2f1a5af51d602807a539fa66c-Folha_2068075" alt="OS 93385" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="93385" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="169" data-linha="Premium" data-id="98608">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98608</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/99b0dd6a41aee2c010a7e70ba51ab644-Folha_2068970" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/99b0dd6a41aee2c010a7e70ba51ab644-Folha_2068970" alt="OS 98608" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">✈ Aeroporto Senador Petrôni Portela</div>
+        <button class="feitobtn" data-id="98608" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="166" data-linha="Essencial" data-id="96763">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96763</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3c4d05dd5a63f0599bf8fa60abf1b32d-Folha_2019591" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3c4d05dd5a63f0599bf8fa60abf1b32d-Folha_2019591" alt="OS 96763" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="96763" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col hoje">
+      <div class="colhead"><div class="cd">TERÇA</div><div class="cdt">30/06</div><div class="ccount">2 pedidos</div></div>
+      <div class="cards" data-day="2026-06-30"><div class="card premium" draggable="true" data-uid="180" data-linha="Premium" data-id="98646">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98646</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/a3b77e59a512c5f1ac868cfb9bbed954-Folha_2069364" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/a3b77e59a512c5f1ac868cfb9bbed954-Folha_2069364" alt="OS 98646" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98646" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="179" data-linha="Essencial" data-id="97906">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97906</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b6b7bbe6de0134f4b927314cad2c932e-Folha_2051926" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b6b7bbe6de0134f4b927314cad2c932e-Folha_2051926" alt="OS 97906" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97906" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUARTA</div><div class="cdt">01/07</div><div class="ccount">3 pedidos</div></div>
+      <div class="cards" data-day="2026-07-01"><div class="card premium" draggable="true" data-uid="200" data-linha="Premium" data-id="98652">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98652</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/28f37dbd0a6a2f70006f5800367a65dc-Folha_2070150" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/28f37dbd0a6a2f70006f5800367a65dc-Folha_2070150" alt="OS 98652" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="98652" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="198" data-linha="Essencial" data-id="97351">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97351</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1f6047c35976825e34811b9838463097-Folha_2052633" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1f6047c35976825e34811b9838463097-Folha_2052633" alt="OS 97351" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97351" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="199" data-linha="Essencial" data-id="97972">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97972</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d6de65101447f026ea2d104fd56cdd18-Folha_2049264" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d6de65101447f026ea2d104fd56cdd18-Folha_2049264" alt="OS 97972" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="97972" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUINTA</div><div class="cdt">02/07</div><div class="ccount">5 pedidos</div></div>
+      <div class="cards" data-day="2026-07-02"><div class="card premium" draggable="true" data-uid="210" data-linha="Premium" data-id="98157">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98157</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/95264fff2d4a5da3192922ae1df52242-Folha_2055908" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/95264fff2d4a5da3192922ae1df52242-Folha_2055908" alt="OS 98157" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="98157" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="212" data-linha="Premium" data-id="98034">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98034</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0c6adc202570b6c294cf37757039ec9e-Folha_2053649" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0c6adc202570b6c294cf37757039ec9e-Folha_2053649" alt="OS 98034" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98034" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="215" data-linha="Premium" data-id="98304">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98304</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/22019ac7aed659fb54d66281e647b1ca-Folha_2063060" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/22019ac7aed659fb54d66281e647b1ca-Folha_2063060" alt="OS 98304" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98304" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card premium" draggable="true" data-uid="230" data-linha="Premium" data-id="98630">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98630</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/604f65f1a762641f47c8e9737b551302-Folha_2068968" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/604f65f1a762641f47c8e9737b551302-Folha_2068968" alt="OS 98630" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏢 Retirada no escritório</div>
+        <button class="feitobtn" data-id="98630" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="211" data-linha="Essencial" data-id="98072">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98072</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e880a403bfd9051c6dc17af7ccaa5b1f-Folha_2055914" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e880a403bfd9051c6dc17af7ccaa5b1f-Folha_2055914" alt="OS 98072" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98072" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">SEXTA</div><div class="cdt">03/07</div><div class="ccount">3 pedidos</div></div>
+      <div class="cards" data-day="2026-07-03"><div class="card premium" draggable="true" data-uid="225" data-linha="Premium" data-id="98335">
+      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98335</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/63edea8e1cacc19cb345b94e9ab90d65-Folha_2062524" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/63edea8e1cacc19cb345b94e9ab90d65-Folha_2062524" alt="OS 98335" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98335" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="223" data-linha="Essencial" data-id="98179">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98179</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/223389888ae3e646ec8cebd53194d727-Folha_1903825" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/223389888ae3e646ec8cebd53194d727-Folha_1903825" alt="OS 98179" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98179" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div><div class="card essencial" draggable="true" data-uid="224" data-linha="Essencial" data-id="98194">
+      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98194</span></div>
+      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5c14bb591280b1028b75faf50938e47e-Folha_2055241" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5c14bb591280b1028b75faf50938e47e-Folha_2055241" alt="OS 98194" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
+      <div class="info">
+        
+        <div class="entrega">🏠 Entrega em domicílio</div>
+        <button class="feitobtn" data-id="98194" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
+      </div>
+    </div></div>
+    </div></div>
+<script>
+var GEN='2026-06-30';
+function lsGet(k,def){try{return JSON.parse(localStorage.getItem(k)||def)}catch(e){return JSON.parse(def)}}
+function getFin(){var s=new Set(lsGet('quadro_fin','[]'));try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('quadro_fin_')===0){try{JSON.parse(localStorage.getItem(k)).forEach(function(x){s.add(x);});}catch(e){}}}}catch(e){}return s;}
+function saveFin(){try{localStorage.setItem('quadro_fin',JSON.stringify([...finSet]))}catch(e){}}
+var finSet=getFin();
+var moves=lsGet('quadro_moves_'+GEN,'{}');
+function saveMoves(){try{localStorage.setItem('quadro_moves_'+GEN,JSON.stringify(moves))}catch(e){}}
+var curLinha='todos';
+var curBusca='';
+function render(){
+ document.querySelectorAll('.card').forEach(function(c){
+  var vis=(curLinha==='todos'||c.dataset.linha===curLinha)&&!finSet.has(c.dataset.id)&&(curBusca===''||(c.dataset.id||'').indexOf(curBusca)!==-1);
+  c.style.display=vis?'':'none';
+ });
+ document.querySelectorAll('.col').forEach(function(col){
+  var n=[].slice.call(col.querySelectorAll('.card')).filter(function(c){return !finSet.has(c.dataset.id);}).length;
+  var e=col.querySelector('.ccount'); if(e) e.textContent=n+' pedidos';
+ });
+ var ativos=[].slice.call(document.querySelectorAll('.card')).filter(function(c){return !finSet.has(c.dataset.id);});
+ document.getElementById('statTotal').textContent=ativos.length;
+ document.getElementById('statP').textContent=ativos.filter(function(c){return c.dataset.linha==='Premium';}).length;
+ document.getElementById('statE').textContent=ativos.filter(function(c){return c.dataset.linha==='Essencial';}).length;
+ document.getElementById('statAtras').textContent=[].slice.call(document.querySelectorAll('.col.atrasados .card')).filter(function(c){return !finSet.has(c.dataset.id);}).length;
+ document.getElementById('finN').textContent=finSet.size;
+}
+function filtra(l,btn){curLinha=l;document.querySelectorAll('#linhagrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');render();}
+function buscar(v){curBusca=(v||'').replace(/[^0-9]/g,'');render();}
+function setTam(s,btn){var w={p:'340px',m:'440px',g:'600px'}[s];document.documentElement.style.setProperty('--colw',w);document.querySelectorAll('#sizegrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+function tirarBox(){var v=document.getElementById('finbox').value;v.split(/[^0-9]+/).filter(Boolean).forEach(function(i){finSet.add(i);});document.getElementById('finbox').value='';saveFin();render();}
+function feito(btn){finSet.add(btn.dataset.id);saveFin();render();}
+function limparFin(){if(confirm('Trazer todos os pedidos de volta ao quadro?')){try{var rm=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k==='quadro_fin'||k.indexOf('quadro_fin_')===0))rm.push(k);}rm.forEach(function(k){localStorage.removeItem(k);});}catch(e){}finSet=new Set();render();}}
+function copiarFin(){var arr=[...finSet];if(!arr.length){alert('Nenhum finalizado tirado ainda.');return;}var t=arr.join('\n');navigator.clipboard.writeText(t).then(function(){alert(arr.length+' IDs copiados. Cole na coluna A da aba FINALIZADOS QUADRO.');},function(){window.prompt('Copie os IDs (Ctrl+C) e cole na aba:',arr.join(' '));});}
+function applyMoves(){Object.keys(moves).forEach(function(uid){var c=document.querySelector('.card[data-uid="'+uid+'"]');var t=document.querySelector('.cards[data-day="'+moves[uid]+'"]');if(c&&t)t.appendChild(c);});}
+var dragUid=null;
+function initDrag(){
+ document.querySelectorAll('.card').forEach(function(c){
+  c.addEventListener('dragstart',function(e){dragUid=c.dataset.uid;c.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+  c.addEventListener('dragend',function(){c.classList.remove('dragging');});
+ });
+ document.querySelectorAll('.cards').forEach(function(z){
+  z.addEventListener('dragover',function(e){e.preventDefault();z.classList.add('dragover');});
+  z.addEventListener('dragleave',function(){z.classList.remove('dragover');});
+  z.addEventListener('drop',function(e){e.preventDefault();z.classList.remove('dragover');var c=document.querySelector('.card[data-uid="'+dragUid+'"]');if(c){z.appendChild(c);moves[dragUid]=z.dataset.day;saveMoves();render();}});
+ });
+}
+document.addEventListener('DOMContentLoaded',function(){applyMoves();initDrag();render();});
+</script></body></html>
