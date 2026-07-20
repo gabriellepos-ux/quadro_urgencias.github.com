@@ -72,15 +72,35 @@
  .copyid{margin-left:auto;background:#2a2a2a;border:none;color:#D4A017;font-size:11px;font-weight:800;letter-spacing:.3px;padding:4px 9px;border-radius:5px;cursor:pointer;line-height:1;white-space:nowrap;transition:background .15s,color .15s}
  .copyid:hover{background:#D4A017;color:#0A0A0A}
  .copyid.ok{background:#2E9C8E;color:#fff}
+ @media (max-width:700px){
+  body{height:auto;min-height:100vh;overflow:auto;-webkit-text-size-adjust:100%}
+  header{padding:10px 12px;gap:8px}
+  header h1{font-size:16px}
+  .sub{font-size:11px}
+  .spacer{display:none}
+  .stat{padding:5px 9px;font-size:11px} .stat b{font-size:13px}
+  .filtros{gap:6px;flex-wrap:wrap}
+  .fbtn{padding:9px 13px;font-size:12px}
+  .finbar{gap:6px;margin-top:8px}
+  .finbar input,.finbar input.buscainput{flex:1 1 100%;min-width:0;max-width:none}
+  .fincount{flex:1 1 100%;text-align:center}
+  .board{flex-direction:column;overflow:visible;padding:12px;gap:14px}
+  .col,.col.atrasados{flex:0 0 auto;width:100%;overflow:visible}
+  .cards{overflow:visible;min-height:0;height:auto;padding:10px;scrollbar-gutter:auto}
+  .card{cursor:default}
+  .colhead .cdt{font-size:18px}
+  .copyid{padding:6px 11px;font-size:12px}
+  .feitobtn{padding:10px;font-size:13px}
+ }
 </style></head><body>
 <header>
- <div><h1>QUADRO DE <b>URGÊNCIAS</b></h1><div class="sub">SeuBoné · semana 13/07–17/07 + atrasados · gerado em 13/07/2026</div></div>
+ <div><h1>QUADRO DE <b>URGÊNCIAS</b></h1><div class="sub">SeuBoné · semana 20/07–24/07 + atrasados · gerado em 20/07/2026</div></div>
  <div class="spacer"></div>
- <div class="stat alert">atrasados <b id="statAtras">11</b></div>
- <div class="stat">na semana <b id="statTotal">34</b></div>
- <div class="stat prox">próximas <b id="statProx">92</b></div>
- <div class="stat">Premium <b id="statP">84</b></div>
- <div class="stat">Essencial <b id="statE">42</b></div>
+ <div class="stat alert">atrasados <b id="statAtras">20</b></div>
+ <div class="stat">na semana <b id="statTotal">64</b></div>
+ <div class="stat prox">próximas <b id="statProx">19</b></div>
+ <div class="stat">Premium <b id="statP">43</b></div>
+ <div class="stat">Essencial <b id="statE">40</b></div>
  <div class="filtros" id="linhagrp">
   <button class="fbtn active" onclick="filtra('todos',this)">Todos</button>
   <button class="fbtn" onclick="filtra('Premium',this)">Premium</button>
@@ -100,12 +120,12 @@
  </div>
 </header>
 <div class="board"><div class="col atrasados">
-  <div class="colhead"><div class="cd">⚠ ATRASADOS</div><div class="cdt">PPF vencido</div><div class="ccount">11 pedidos</div></div>
+  <div class="colhead"><div class="cd">⚠ ATRASADOS</div><div class="cdt">PPF vencido</div><div class="ccount">20 pedidos</div></div>
   <div class="cards" data-day="atrasados"><div class="card essencial" draggable="true" data-uid="282" data-linha="Essencial" data-id="98554">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98554</span><button class="copyid" draggable="false" title="Copiar ID 98554" data-id="98554" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8bd9ab4b345e0e7ab25f09cc7698bb65-Folha_2067070" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8bd9ab4b345e0e7ab25f09cc7698bb65-Folha_2067070" alt="OS 98554" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 06/07 · <b>7d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 06/07 · <b>14d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98554" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -113,7 +133,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96206</span><button class="copyid" draggable="false" title="Copiar ID 96206" data-id="96206" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9f943c941c96240af43413cdd3d21a35-Folha_1987791" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9f943c941c96240af43413cdd3d21a35-Folha_1987791" alt="OS 96206" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 07/07 · <b>6d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 07/07 · <b>13d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="96206" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -121,7 +141,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97763</span><button class="copyid" draggable="false" title="Copiar ID 97763" data-id="97763" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f74090b34db22524e1afc3edffef183c-Folha_2047381" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f74090b34db22524e1afc3edffef183c-Folha_2047381" alt="OS 97763" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="97763" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -129,7 +149,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98179</span><button class="copyid" draggable="false" title="Copiar ID 98179" data-id="98179" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/223389888ae3e646ec8cebd53194d727-Folha_1903825" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/223389888ae3e646ec8cebd53194d727-Folha_1903825" alt="OS 98179" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98179" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -137,7 +157,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98514</span><button class="copyid" draggable="false" title="Copiar ID 98514" data-id="98514" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" alt="OS 98514" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98514" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -145,7 +165,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98514</span><button class="copyid" draggable="false" title="Copiar ID 98514" data-id="98514" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" alt="OS 98514" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98514" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -153,7 +173,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98514</span><button class="copyid" draggable="false" title="Copiar ID 98514" data-id="98514" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b26c703508b511b2960caed425b88852-Folha_2066235" alt="OS 98514" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98514" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -161,7 +181,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96401</span><button class="copyid" draggable="false" title="Copiar ID 96401" data-id="96401" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5dd79d1041f39c9190fd265cfdf74f2a-Folha_2009912" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5dd79d1041f39c9190fd265cfdf74f2a-Folha_2009912" alt="OS 96401" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="96401" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -169,7 +189,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98788</span><button class="copyid" draggable="false" title="Copiar ID 98788" data-id="98788" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9a36a98e5eb01cae23a4350a28afcb70-Folha_2074642" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9a36a98e5eb01cae23a4350a28afcb70-Folha_2074642" alt="OS 98788" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 08/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 08/07 · <b>12d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98788" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -177,7 +197,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 96853</span><button class="copyid" draggable="false" title="Copiar ID 96853" data-id="96853" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7f72dbd26f22518770d2807ef0e3d63b-Folha_2067309" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7f72dbd26f22518770d2807ef0e3d63b-Folha_2067309" alt="OS 96853" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 09/07 · <b>4d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 09/07 · <b>11d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="96853" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -185,139 +205,39 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98288</span><button class="copyid" draggable="false" title="Copiar ID 98288" data-id="98288" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f371f40cd2cd7649abd4409d588b6f24-Folha_2053944" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f371f40cd2cd7649abd4409d588b6f24-Folha_2053944" alt="OS 98288" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="atraso">PPF 10/07 · <b>3d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 10/07 · <b>10d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98288" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div></div>
-</div><div class="col hoje">
-      <div class="colhead"><div class="cd">SEGUNDA</div><div class="cdt">13/07</div><div class="ccount">2 pedidos</div></div>
-      <div class="cards" data-day="2026-07-13"><div class="card premium" draggable="true" data-uid="360" data-linha="Premium" data-id="96616">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 96616</span><button class="copyid" draggable="false" title="Copiar ID 96616" data-id="96616" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c1a8e2c4435411514237f828bcc460d4-Folha_2024886" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c1a8e2c4435411514237f828bcc460d4-Folha_2024886" alt="OS 96616" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="96616" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="442" data-linha="Premium" data-id="99330">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99330</span><button class="copyid" draggable="false" title="Copiar ID 99330" data-id="99330" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/71c60acc4f22ea031a459fb479c9ce42-Folha_2090116" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/71c60acc4f22ea031a459fb479c9ce42-Folha_2090116" alt="OS 99330" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏢 Retirada no escritório</div>
-        <button class="feitobtn" data-id="99330" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div></div>
-    </div><div class="col">
-      <div class="colhead"><div class="cd">TERÇA</div><div class="cdt">14/07</div><div class="ccount">5 pedidos</div></div>
-      <div class="cards" data-day="2026-07-14"><div class="card premium" draggable="true" data-uid="386" data-linha="Premium" data-id="98836">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98836</span><button class="copyid" draggable="false" title="Copiar ID 98836" data-id="98836" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c525ba8030e842621e7f850012b8030a-Folha_2071680" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c525ba8030e842621e7f850012b8030a-Folha_2071680" alt="OS 98836" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="98836" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="411" data-linha="Premium" data-id="99111">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99111</span><button class="copyid" draggable="false" title="Copiar ID 99111" data-id="99111" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/adcbef4f08249412d3f60ee883fba6b2-Folha_2084067" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/adcbef4f08249412d3f60ee883fba6b2-Folha_2084067" alt="OS 99111" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99111" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="419" data-linha="Premium" data-id="99237">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99237</span><button class="copyid" draggable="false" title="Copiar ID 99237" data-id="99237" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6988e5feed0a372404fb02ec9f399d9f-Folha_2088146" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6988e5feed0a372404fb02ec9f399d9f-Folha_2088146" alt="OS 99237" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99237" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card essencial" draggable="true" data-uid="373" data-linha="Essencial" data-id="98889">
-      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98889</span><button class="copyid" draggable="false" title="Copiar ID 98889" data-id="98889" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c8d27ec394c62146af18184ab4663319-Folha_2076596" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c8d27ec394c62146af18184ab4663319-Folha_2076596" alt="OS 98889" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">✈ Aeroporto de Porto Velho</div>
-        <button class="feitobtn" data-id="98889" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="397" data-linha="Essencial" data-id="99055">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99055</span><button class="copyid" draggable="false" title="Copiar ID 99055" data-id="99055" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c1b780e82226479f06bb499cfdd60acf-Folha_2077282" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c1b780e82226479f06bb499cfdd60acf-Folha_2077282" alt="OS 99055" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 14/07 · <b>6d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99055" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div></div>
-    </div><div class="col">
-      <div class="colhead"><div class="cd">QUARTA</div><div class="cdt">15/07</div><div class="ccount">6 pedidos</div></div>
-      <div class="cards" data-day="2026-07-15"><div class="card premium" draggable="true" data-uid="277" data-linha="Premium" data-id="98601">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98601</span><button class="copyid" draggable="false" title="Copiar ID 98601" data-id="98601" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/81e3a050e8919a3c0291acecb380a86b-Folha_2071427" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/81e3a050e8919a3c0291acecb380a86b-Folha_2071427" alt="OS 98601" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="98601" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="335" data-linha="Premium" data-id="97466">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97466</span><button class="copyid" draggable="false" title="Copiar ID 97466" data-id="97466" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3e4504b4123a17816e0f52d99a65df95-Folha_2074083" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3e4504b4123a17816e0f52d99a65df95-Folha_2074083" alt="OS 97466" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="97466" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="440" data-linha="Premium" data-id="99318">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99318</span><button class="copyid" draggable="false" title="Copiar ID 99318" data-id="99318" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9017d3a7a840fbd4757153dd7511cabf-Folha_2089921" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9017d3a7a840fbd4757153dd7511cabf-Folha_2089921" alt="OS 99318" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏢 Retirada no escritório</div>
-        <button class="feitobtn" data-id="99318" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="316" data-linha="Essencial" data-id="98643">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98643</span><button class="copyid" draggable="false" title="Copiar ID 98643" data-id="98643" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/44a7ae9343eba7824834e085c0324839-Folha_2069038" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/44a7ae9343eba7824834e085c0324839-Folha_2069038" alt="OS 98643" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 15/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98643" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card essencial" draggable="true" data-uid="366" data-linha="Essencial" data-id="98942">
-      <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98942</span><button class="copyid" draggable="false" title="Copiar ID 98942" data-id="98942" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/4d5274feb489f0847b4c3f04fc1843b7-Folha_2078065" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/4d5274feb489f0847b4c3f04fc1843b7-Folha_2078065" alt="OS 98942" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="98942" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="368" data-linha="Essencial" data-id="98947">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98947</span><button class="copyid" draggable="false" title="Copiar ID 98947" data-id="98947" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d3686a7d4042a54d95dc91a67e6f27ba-Folha_2078111" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d3686a7d4042a54d95dc91a67e6f27ba-Folha_2078111" alt="OS 98947" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 15/07 · <b>5d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98947" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div></div>
-    </div><div class="col">
-      <div class="colhead"><div class="cd">QUINTA</div><div class="cdt">16/07</div><div class="ccount">3 pedidos</div></div>
-      <div class="cards" data-day="2026-07-16"><div class="card premium" draggable="true" data-uid="412" data-linha="Premium" data-id="99040">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99040</span><button class="copyid" draggable="false" title="Copiar ID 99040" data-id="99040" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/45d3f538ce151adc78cbd1f9c39f59d5-Folha_2024768" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/45d3f538ce151adc78cbd1f9c39f59d5-Folha_2024768" alt="OS 99040" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99040" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="355" data-linha="Essencial" data-id="98874">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98874</span><button class="copyid" draggable="false" title="Copiar ID 98874" data-id="98874" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/16f5f308ff312a74fbd39186f8515912-Folha_2049090" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/16f5f308ff312a74fbd39186f8515912-Folha_2049090" alt="OS 98874" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 16/07 · <b>4d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98874" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -325,42 +245,15 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99452</span><button class="copyid" draggable="false" title="Copiar ID 99452" data-id="99452" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f4930b709289963033d1d6d450ad0022-Folha_2095427" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f4930b709289963033d1d6d450ad0022-Folha_2095427" alt="OS 99452" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        
+        <div class="atraso">PPF 16/07 · <b>4d atrasado</b></div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99452" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div></div>
-    </div><div class="col">
-      <div class="colhead"><div class="cd">SEXTA</div><div class="cdt">17/07</div><div class="ccount">7 pedidos</div></div>
-      <div class="cards" data-day="2026-07-17"><div class="card premium" draggable="true" data-uid="439" data-linha="Premium" data-id="99252">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99252</span><button class="copyid" draggable="false" title="Copiar ID 99252" data-id="99252" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e41b3e50d0f15711c812e416fde2f392-Folha_2089873" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e41b3e50d0f15711c812e416fde2f392-Folha_2089873" alt="OS 99252" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99252" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="441" data-linha="Premium" data-id="99329">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99329</span><button class="copyid" draggable="false" title="Copiar ID 99329" data-id="99329" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7610c6fef38cd6cf427d7cde541450d2-Folha_2089913" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7610c6fef38cd6cf427d7cde541450d2-Folha_2089913" alt="OS 99329" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99329" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="505" data-linha="Premium" data-id="99627">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99627</span><button class="copyid" draggable="false" title="Copiar ID 99627" data-id="99627" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d968940fd4d530fc4fd367dff940bdee-Folha_2100165" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d968940fd4d530fc4fd367dff940bdee-Folha_2100165" alt="OS 99627" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">✈ Aeroporto de Viracopos</div>
-        <button class="feitobtn" data-id="99627" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="242" data-linha="Essencial" data-id="98219">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98219</span><button class="copyid" draggable="false" title="Copiar ID 98219" data-id="98219" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/aa6ca10b1b37d096ae899524022b70cb-Folha_2058603" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/aa6ca10b1b37d096ae899524022b70cb-Folha_2058603" alt="OS 98219" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 17/07 · <b>3d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98219" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -368,7 +261,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98982</span><button class="copyid" draggable="false" title="Copiar ID 98982" data-id="98982" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/797e2a13263ff223fe364de2dd568cb6-Folha_2080078" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/797e2a13263ff223fe364de2dd568cb6-Folha_2080078" alt="OS 98982" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 17/07 · <b>3d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Teresina</div>
         <button class="feitobtn" data-id="98982" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -376,7 +269,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99265</span><button class="copyid" draggable="false" title="Copiar ID 99265" data-id="99265" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8391856750fb7c479b661695c49525d6-Folha_2088587" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8391856750fb7c479b661695c49525d6-Folha_2088587" alt="OS 99265" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 17/07 · <b>3d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏢 Retirada no escritório</div>
         <button class="feitobtn" data-id="99265" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -384,18 +277,18 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99598</span><button class="copyid" draggable="false" title="Copiar ID 99598" data-id="99598" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/34155dafef55a321af20c1ddc4291aed-Folha_2096734" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/34155dafef55a321af20c1ddc4291aed-Folha_2096734" alt="OS 99598" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ajustado">✓ data ajustada</div>
+        <div class="atraso">PPF 17/07 · <b>3d atrasado</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Ribeirão Preto</div>
         <button class="feitobtn" data-id="99598" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div></div>
-    </div><div class="col proximas">
-  <div class="colhead"><div class="cd">📅 PRÓXIMAS SEMANAS</div><div class="cdt">depois de 17/07</div><div class="ccount">92 pedidos</div></div>
-  <div class="cards" data-day="proximas"><div class="card premium" draggable="true" data-uid="474" data-linha="Premium" data-id="99781">
+</div><div class="col hoje">
+      <div class="colhead"><div class="cd">SEGUNDA</div><div class="cdt">20/07</div><div class="ccount">7 pedidos</div></div>
+      <div class="cards" data-day="2026-07-20"><div class="card premium" draggable="true" data-uid="474" data-linha="Premium" data-id="99781">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99781</span><button class="copyid" draggable="false" title="Copiar ID 99781" data-id="99781" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e957d18566255f77887158cf53bfba2d-Folha_2103625" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e957d18566255f77887158cf53bfba2d-Folha_2103625" alt="OS 99781" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Guarulhos</div>
         <button class="feitobtn" data-id="99781" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -403,7 +296,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99786</span><button class="copyid" draggable="false" title="Copiar ID 99786" data-id="99786" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/2dd93a2559b3f186354becffad144661-Folha_2103875" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/2dd93a2559b3f186354becffad144661-Folha_2103875" alt="OS 99786" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Guarulhos</div>
         <button class="feitobtn" data-id="99786" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -411,7 +304,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99785</span><button class="copyid" draggable="false" title="Copiar ID 99785" data-id="99785" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/06e2439335ec9406b47cac17a0a984c2-Folha_2103763" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/06e2439335ec9406b47cac17a0a984c2-Folha_2103763" alt="OS 99785" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Guarulhos</div>
         <button class="feitobtn" data-id="99785" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -419,7 +312,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99784</span><button class="copyid" draggable="false" title="Copiar ID 99784" data-id="99784" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6f136d1ae300147d063aadfbbd1a39e5-Folha_2103704" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6f136d1ae300147d063aadfbbd1a39e5-Folha_2103704" alt="OS 99784" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Guarulhos</div>
         <button class="feitobtn" data-id="99784" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -427,7 +320,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99782</span><button class="copyid" draggable="false" title="Copiar ID 99782" data-id="99782" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/320d69897a81988ab3426d9e2ee1926d-Folha_2103653" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/320d69897a81988ab3426d9e2ee1926d-Folha_2103653" alt="OS 99782" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Guarulhos</div>
         <button class="feitobtn" data-id="99782" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -435,7 +328,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98443</span><button class="copyid" draggable="false" title="Copiar ID 98443" data-id="98443" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b770fc46d552ce5e7d5004d01b8a4198-Folha_2064898" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b770fc46d552ce5e7d5004d01b8a4198-Folha_2064898" alt="OS 98443" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98443" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -443,47 +336,18 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99391</span><button class="copyid" draggable="false" title="Copiar ID 99391" data-id="99391" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e59f889de19ed552c867db321e851b76-Folha_2092216" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e59f889de19ed552c867db321e851b76-Folha_2092216" alt="OS 99391" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>20/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99391" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="353" data-linha="Premium" data-id="98823">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98823</span><button class="copyid" draggable="false" title="Copiar ID 98823" data-id="98823" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/22d25da6bec3de9630704da2ffbd23df-Folha_2075033" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/22d25da6bec3de9630704da2ffbd23df-Folha_2075033" alt="OS 98823" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="98823" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="387" data-linha="Premium" data-id="99004">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99004</span><button class="copyid" draggable="false" title="Copiar ID 99004" data-id="99004" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/05cc4a7761e57a91894853dab9c2d4c5-Folha_2074869" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/05cc4a7761e57a91894853dab9c2d4c5-Folha_2074869" alt="OS 99004" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99004" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="451" data-linha="Premium" data-id="99413">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99413</span><button class="copyid" draggable="false" title="Copiar ID 99413" data-id="99413" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/be7bdbf86cc111e4904475565ded55a0-Folha_2092506" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/be7bdbf86cc111e4904475565ded55a0-Folha_2092506" alt="OS 99413" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99413" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="461" data-linha="Premium" data-id="99358">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99358</span><button class="copyid" draggable="false" title="Copiar ID 99358" data-id="99358" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5b7264da191ebc52782d66d3645a72c9-Folha_2089634" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5b7264da191ebc52782d66d3645a72c9-Folha_2089634" alt="OS 99358" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99358" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="462" data-linha="Premium" data-id="99125">
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">TERÇA</div><div class="cdt">21/07</div><div class="ccount">13 pedidos</div></div>
+      <div class="cards" data-day="2026-07-21"><div class="card premium" draggable="true" data-uid="462" data-linha="Premium" data-id="99125">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99125</span><button class="copyid" draggable="false" title="Copiar ID 99125" data-id="99125" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7f9673c77e0b76ece7cd90e5984f693a-Folha_2082889" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7f9673c77e0b76ece7cd90e5984f693a-Folha_2082889" alt="OS 99125" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99125" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -491,7 +355,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99150</span><button class="copyid" draggable="false" title="Copiar ID 99150" data-id="99150" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c812aaa95d0a299336b2fd19add7de40-Folha_2099575" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c812aaa95d0a299336b2fd19add7de40-Folha_2099575" alt="OS 99150" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99150" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -499,7 +363,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99651</span><button class="copyid" draggable="false" title="Copiar ID 99651" data-id="99651" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/07adea746428ef203ab3cf1bdd971b14-Folha_2101867" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/07adea746428ef203ab3cf1bdd971b14-Folha_2101867" alt="OS 99651" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99651" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -507,7 +371,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99603</span><button class="copyid" draggable="false" title="Copiar ID 99603" data-id="99603" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1584fb2ea42620f2b0b69930e78b7882-Folha_2099513" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1584fb2ea42620f2b0b69930e78b7882-Folha_2099513" alt="OS 99603" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99603" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -515,7 +379,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99628</span><button class="copyid" draggable="false" title="Copiar ID 99628" data-id="99628" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b66919a3aacd82492dd4262276d8f079-Folha_1951403" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b66919a3aacd82492dd4262276d8f079-Folha_1951403" alt="OS 99628" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">✈ Aeroporto de Ribeirão Preto</div>
         <button class="feitobtn" data-id="99628" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -523,7 +387,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99682</span><button class="copyid" draggable="false" title="Copiar ID 99682" data-id="99682" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/915d9c12ba191db62fccc5e05b9a6cab-Folha_2101803" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/915d9c12ba191db62fccc5e05b9a6cab-Folha_2101803" alt="OS 99682" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99682" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -531,7 +395,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99149</span><button class="copyid" draggable="false" title="Copiar ID 99149" data-id="99149" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5cd7c98ffcd0fb5d16466154edca71ca-Folha_2085542" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5cd7c98ffcd0fb5d16466154edca71ca-Folha_2085542" alt="OS 99149" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99149" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -539,7 +403,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99711</span><button class="copyid" draggable="false" title="Copiar ID 99711" data-id="99711" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7e0898b9286412949a9fa0c91c4e8bdc-Folha_2103747" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7e0898b9286412949a9fa0c91c4e8bdc-Folha_2103747" alt="OS 99711" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99711" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -547,7 +411,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99806</span><button class="copyid" draggable="false" title="Copiar ID 99806" data-id="99806" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8eaab764753099c66d497aa5db24160c-Folha_2105065" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8eaab764753099c66d497aa5db24160c-Folha_2105065" alt="OS 99806" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99806" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -555,7 +419,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98936</span><button class="copyid" draggable="false" title="Copiar ID 98936" data-id="98936" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1a947f580df0a22018a11ff108162eaa-Folha_2077981" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1a947f580df0a22018a11ff108162eaa-Folha_2077981" alt="OS 98936" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98936" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -563,7 +427,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99006</span><button class="copyid" draggable="false" title="Copiar ID 99006" data-id="99006" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f03fbaee027354917f4bd33292ed7b5c-Folha_2089137" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f03fbaee027354917f4bd33292ed7b5c-Folha_2089137" alt="OS 99006" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99006" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -571,7 +435,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99361</span><button class="copyid" draggable="false" title="Copiar ID 99361" data-id="99361" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8b7dffd4fbcda287fae6a89f03bca5db-Folha_2090642" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8b7dffd4fbcda287fae6a89f03bca5db-Folha_2090642" alt="OS 99361" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99361" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -579,15 +443,18 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99482</span><button class="copyid" draggable="false" title="Copiar ID 99482" data-id="99482" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7bf60f7cd3d449dedfc2749c90bf897d-Folha_2098606" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7bf60f7cd3d449dedfc2749c90bf897d-Folha_2098606" alt="OS 99482" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>21/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99482" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="379" data-linha="Premium" data-id="99001">
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUARTA</div><div class="cdt">22/07</div><div class="ccount">15 pedidos</div></div>
+      <div class="cards" data-day="2026-07-22"><div class="card premium" draggable="true" data-uid="379" data-linha="Premium" data-id="99001">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99001</span><button class="copyid" draggable="false" title="Copiar ID 99001" data-id="99001" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9417a5b56ee869df8a94ff103b107dce-Folha_2078862" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9417a5b56ee869df8a94ff103b107dce-Folha_2078862" alt="OS 99001" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99001" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -595,7 +462,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98747</span><button class="copyid" draggable="false" title="Copiar ID 98747" data-id="98747" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/f2a3fa39dd81e41b41ff9fd1a5889579-Folha_2089840" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/f2a3fa39dd81e41b41ff9fd1a5889579-Folha_2089840" alt="OS 98747" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏢 Retirada no escritório</div>
         <button class="feitobtn" data-id="98747" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -603,7 +470,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99312</span><button class="copyid" draggable="false" title="Copiar ID 99312" data-id="99312" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8353597e7c1a3b93b1db5c9af0a2a238-Folha_2090898" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8353597e7c1a3b93b1db5c9af0a2a238-Folha_2090898" alt="OS 99312" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99312" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -611,7 +478,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99045</span><button class="copyid" draggable="false" title="Copiar ID 99045" data-id="99045" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/07c30e06b63153a766d9fa8274703fcb-Folha_2098811" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/07c30e06b63153a766d9fa8274703fcb-Folha_2098811" alt="OS 99045" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99045" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -619,7 +486,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99718</span><button class="copyid" draggable="false" title="Copiar ID 99718" data-id="99718" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c6dc6eae7453a14b61f9d2b4279dcb6f-Folha_2100893" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c6dc6eae7453a14b61f9d2b4279dcb6f-Folha_2100893" alt="OS 99718" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏢 Retirada no escritório</div>
         <button class="feitobtn" data-id="99718" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -627,47 +494,15 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99696</span><button class="copyid" draggable="false" title="Copiar ID 99696" data-id="99696" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d9a5381223959c021b62f31307664a1d-Folha_2095376" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d9a5381223959c021b62f31307664a1d-Folha_2095376" alt="OS 99696" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99696" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="495" data-linha="Premium" data-id="99521">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99521</span><button class="copyid" draggable="false" title="Copiar ID 99521" data-id="99521" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8054623f2c0f64cc76fa0bd9cacac877-Folha_2094968" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8054623f2c0f64cc76fa0bd9cacac877-Folha_2094968" alt="OS 99521" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99521" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="500" data-linha="Premium" data-id="97451">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97451</span><button class="copyid" draggable="false" title="Copiar ID 97451" data-id="97451" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/81287966849a4047c664c9efed05c5f7-Folha_2043797" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/81287966849a4047c664c9efed05c5f7-Folha_2043797" alt="OS 97451" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="97451" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="502" data-linha="Premium" data-id="99557">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99557</span><button class="copyid" draggable="false" title="Copiar ID 99557" data-id="99557" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/2b576c84f17d72e05091f550f931c93a-Folha_2098373" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/2b576c84f17d72e05091f550f931c93a-Folha_2098373" alt="OS 99557" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99557" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="506" data-linha="Premium" data-id="99632">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99632</span><button class="copyid" draggable="false" title="Copiar ID 99632" data-id="99632" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b1fe448e98f9d7113d4c76d3e9a65b19-Folha_2100283" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b1fe448e98f9d7113d4c76d3e9a65b19-Folha_2100283" alt="OS 99632" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99632" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card premium" draggable="true" data-uid="511" data-linha="Premium" data-id="99597">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99597</span><button class="copyid" draggable="false" title="Copiar ID 99597" data-id="99597" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/32631a97182261781e60af14dfdb987c-Folha_2099239" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/32631a97182261781e60af14dfdb987c-Folha_2099239" alt="OS 99597" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99597" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -675,7 +510,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98591</span><button class="copyid" draggable="false" title="Copiar ID 98591" data-id="98591" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/2d21cbca668afc8a124e16b0d110c32c-Folha_2068019" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/2d21cbca668afc8a124e16b0d110c32c-Folha_2068019" alt="OS 98591" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98591" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -683,7 +518,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99759</span><button class="copyid" draggable="false" title="Copiar ID 99759" data-id="99759" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/83044978959d61d0e8834c8b3c6b8b87-Folha_2103793" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/83044978959d61d0e8834c8b3c6b8b87-Folha_2103793" alt="OS 99759" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99759" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -691,7 +526,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99729</span><button class="copyid" draggable="false" title="Copiar ID 99729" data-id="99729" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9379a800b6382b7cf47600a1ddf54bfc-Folha_2090165" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9379a800b6382b7cf47600a1ddf54bfc-Folha_2090165" alt="OS 99729" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99729" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -699,7 +534,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99726</span><button class="copyid" draggable="false" title="Copiar ID 99726" data-id="99726" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/526379df5d905d9c581454c282ac5f87-Folha_2103212" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/526379df5d905d9c581454c282ac5f87-Folha_2103212" alt="OS 99726" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏢 Retirada no escritório</div>
         <button class="feitobtn" data-id="99726" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -707,7 +542,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99771</span><button class="copyid" draggable="false" title="Copiar ID 99771" data-id="99771" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/2302fde6f96940476215cc6b956af9ce-Folha_2103927" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/2302fde6f96940476215cc6b956af9ce-Folha_2103927" alt="OS 99771" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99771" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -715,7 +550,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99648</span><button class="copyid" draggable="false" title="Copiar ID 99648" data-id="99648" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d50c98ad4b8941fa1cd0a910ecba7728-Folha_2083364" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d50c98ad4b8941fa1cd0a910ecba7728-Folha_2083364" alt="OS 99648" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99648" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -723,7 +558,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99808</span><button class="copyid" draggable="false" title="Copiar ID 99808" data-id="99808" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/52cb2307c78047e95ea920094ab2c7f1-Folha_2078013" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/52cb2307c78047e95ea920094ab2c7f1-Folha_2078013" alt="OS 99808" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99808" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -731,31 +566,18 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98996</span><button class="copyid" draggable="false" title="Copiar ID 98996" data-id="98996" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/8f56aee07f5b24feca42c70b594f6954-Folha_2092801" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/8f56aee07f5b24feca42c70b594f6954-Folha_2092801" alt="OS 98996" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>22/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98996" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="420" data-linha="Premium" data-id="99008">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99008</span><button class="copyid" draggable="false" title="Copiar ID 99008" data-id="99008" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c2b005e9b0de94cc0d6f3160e6b18b37-Folha_2087970" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c2b005e9b0de94cc0d6f3160e6b18b37-Folha_2087970" alt="OS 99008" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99008" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="452" data-linha="Premium" data-id="99369">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99369</span><button class="copyid" draggable="false" title="Copiar ID 99369" data-id="99369" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/76bd2b768e77fc393b830d81ea48fb2d-Folha_2090102" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/76bd2b768e77fc393b830d81ea48fb2d-Folha_2090102" alt="OS 99369" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99369" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="513" data-linha="Premium" data-id="99645">
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">QUINTA</div><div class="cdt">23/07</div><div class="ccount">5 pedidos</div></div>
+      <div class="cards" data-day="2026-07-23"><div class="card premium" draggable="true" data-uid="513" data-linha="Premium" data-id="99645">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99645</span><button class="copyid" draggable="false" title="Copiar ID 99645" data-id="99645" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9e17b764e65b1ef9b60c09a449747060-Folha_2086387" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9e17b764e65b1ef9b60c09a449747060-Folha_2086387" alt="OS 99645" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99645" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -763,7 +585,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99854</span><button class="copyid" draggable="false" title="Copiar ID 99854" data-id="99854" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/03294a44769aee68bc650f3f9fff9b93-Folha_2106754" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/03294a44769aee68bc650f3f9fff9b93-Folha_2106754" alt="OS 99854" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99854" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -771,7 +593,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98768</span><button class="copyid" draggable="false" title="Copiar ID 98768" data-id="98768" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/c1ae6510967ae7eb68beb1f6d2f76ced-Folha_2074594" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/c1ae6510967ae7eb68beb1f6d2f76ced-Folha_2074594" alt="OS 98768" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98768" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -779,7 +601,7 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 97069</span><button class="copyid" draggable="false" title="Copiar ID 97069" data-id="97069" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d805cf65d85533edaa41eaa06319fa19-Folha_1997955" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d805cf65d85533edaa41eaa06319fa19-Folha_1997955" alt="OS 97069" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="97069" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -787,31 +609,18 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99686</span><button class="copyid" draggable="false" title="Copiar ID 99686" data-id="99686" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/d3c4a8f14634696fa727b09d7dc4cd78-Folha_2101561" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/d3c4a8f14634696fa727b09d7dc4cd78-Folha_2101561" alt="OS 99686" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>23/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99686" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="415" data-linha="Premium" data-id="99197">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99197</span><button class="copyid" draggable="false" title="Copiar ID 99197" data-id="99197" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/20aeab6d4da225324aeb4fcc4ab90774-Folha_2085360" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/20aeab6d4da225324aeb4fcc4ab90774-Folha_2085360" alt="OS 99197" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99197" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="456" data-linha="Premium" data-id="99405">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99405</span><button class="copyid" draggable="false" title="Copiar ID 99405" data-id="99405" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/3408076cf3d2d5d5279b137dfd0f07cc-Folha_2092867" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/3408076cf3d2d5d5279b137dfd0f07cc-Folha_2092867" alt="OS 99405" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99405" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="471" data-linha="Premium" data-id="99662">
+    </div></div>
+    </div><div class="col">
+      <div class="colhead"><div class="cd">SEXTA</div><div class="cdt">24/07</div><div class="ccount">4 pedidos</div></div>
+      <div class="cards" data-day="2026-07-24"><div class="card premium" draggable="true" data-uid="471" data-linha="Premium" data-id="99662">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99662</span><button class="copyid" draggable="false" title="Copiar ID 99662" data-id="99662" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/b59af60cb503a081d56aaa0fcb50d05f-Folha_2100521" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/b59af60cb503a081d56aaa0fcb50d05f-Folha_2100521" alt="OS 99662" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99662" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -819,7 +628,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99681</span><button class="copyid" draggable="false" title="Copiar ID 99681" data-id="99681" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/57bf3e9bbec1a40eed0cc742ea9575be-Folha_2100114" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/57bf3e9bbec1a40eed0cc742ea9575be-Folha_2100114" alt="OS 99681" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99681" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -827,7 +636,7 @@
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99761</span><button class="copyid" draggable="false" title="Copiar ID 99761" data-id="99761" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6582de98d768e31817d679718892d5fc-Folha_2095924" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6582de98d768e31817d679718892d5fc-Folha_2095924" alt="OS 99761" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99761" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
@@ -835,75 +644,14 @@
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 98893</span><button class="copyid" draggable="false" title="Copiar ID 98893" data-id="98893" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/6a62594f6731b7bc832b63c11478bbec-Folha_2078274" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/6a62594f6731b7bc832b63c11478bbec-Folha_2078274" alt="OS 98893" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
-        <div class="ppfest">PPF estimado <b>24/07</b></div><div class="ajustado">✓ data ajustada</div>
+        <div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="98893" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="463" data-linha="Premium" data-id="99447">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99447</span><button class="copyid" draggable="false" title="Copiar ID 99447" data-id="99447" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5a16e070c04a9f48fa2a2da940e8b6d3-Folha_2092402" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5a16e070c04a9f48fa2a2da940e8b6d3-Folha_2092402" alt="OS 99447" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99447" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="464" data-linha="Premium" data-id="99414">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99414</span><button class="copyid" draggable="false" title="Copiar ID 99414" data-id="99414" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/88fd883f97d05ed5f0ed5568b8ab65ec-Folha_2092383" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/88fd883f97d05ed5f0ed5568b8ab65ec-Folha_2092383" alt="OS 99414" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">✈ Aeroporto de Salvador</div>
-        <button class="feitobtn" data-id="99414" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="465" data-linha="Premium" data-id="97431">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 97431</span><button class="copyid" draggable="false" title="Copiar ID 97431" data-id="97431" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/1332798f24d11ba205f28df6380ea9fd-Folha_2040227" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/1332798f24d11ba205f28df6380ea9fd-Folha_2040227" alt="OS 97431" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="97431" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="480" data-linha="Premium" data-id="99418">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99418</span><button class="copyid" draggable="false" title="Copiar ID 99418" data-id="99418" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/0a34ce57b71b84dc16f68b73cfa7b38e-Folha_2088222" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/0a34ce57b71b84dc16f68b73cfa7b38e-Folha_2088222" alt="OS 99418" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">✈ Aeroporto de Guarulhos</div>
-        <button class="feitobtn" data-id="99418" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="482" data-linha="Premium" data-id="98955">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 98955</span><button class="copyid" draggable="false" title="Copiar ID 98955" data-id="98955" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/5c57eab7eecc4ba5cf139cc025113f46-Folha_2095116" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/5c57eab7eecc4ba5cf139cc025113f46-Folha_2095116" alt="OS 98955" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏢 Retirada no escritório</div>
-        <button class="feitobtn" data-id="98955" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="485" data-linha="Premium" data-id="99438">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99438</span><button class="copyid" draggable="false" title="Copiar ID 99438" data-id="99438" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/520eb1e67c2fd738a88ee497a4f0049f-Folha_2093815" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/520eb1e67c2fd738a88ee497a4f0049f-Folha_2093815" alt="OS 99438" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99438" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="487" data-linha="Premium" data-id="99466">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99466</span><button class="copyid" draggable="false" title="Copiar ID 99466" data-id="99466" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/7d76ee8166be2f86d0a00dc7320ccf72-Folha_2096897" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/7d76ee8166be2f86d0a00dc7320ccf72-Folha_2096897" alt="OS 99466" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99466" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="488" data-linha="Premium" data-id="99137">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99137</span><button class="copyid" draggable="false" title="Copiar ID 99137" data-id="99137" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/483cbca21a8634ee4bd08bb199f41ae3-Folha_2097415" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/483cbca21a8634ee4bd08bb199f41ae3-Folha_2097415" alt="OS 99137" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>27/07</b></div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99137" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="509" data-linha="Premium" data-id="99669">
+    </div></div>
+    </div><div class="col proximas">
+  <div class="colhead"><div class="cd">📅 PRÓXIMAS SEMANAS</div><div class="cdt">depois de 24/07</div><div class="ccount">19 pedidos</div></div>
+  <div class="cards" data-day="proximas"><div class="card premium" draggable="true" data-uid="509" data-linha="Premium" data-id="99669">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99669</span><button class="copyid" draggable="false" title="Copiar ID 99669" data-id="99669" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/db3e76dba9cdbd01df930cc7a2531cc0-Folha_2101282" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/db3e76dba9cdbd01df930cc7a2531cc0-Folha_2101282" alt="OS 99669" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
       <div class="info">
@@ -959,14 +707,6 @@
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99050" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="458" data-linha="Premium" data-id="99266">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99266</span><button class="copyid" draggable="false" title="Copiar ID 99266" data-id="99266" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/14acc973eb8b5e9e9c945b11ed2399c3-Folha_2082551" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/14acc973eb8b5e9e9c945b11ed2399c3-Folha_2082551" alt="OS 99266" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>28/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99266" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
     </div><div class="card essencial" draggable="true" data-uid="496" data-linha="Essencial" data-id="99531">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99531</span><button class="copyid" draggable="false" title="Copiar ID 99531" data-id="99531" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/fbc08697121723ce74dffdd6f4d3529a-Folha_2099237" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/fbc08697121723ce74dffdd6f4d3529a-Folha_2099237" alt="OS 99531" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
@@ -974,38 +714,6 @@
         <div class="ppfest">PPF estimado <b>28/07</b></div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99531" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="450" data-linha="Premium" data-id="99392">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99392</span><button class="copyid" draggable="false" title="Copiar ID 99392" data-id="99392" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/447f0578782e7d026d416a6a6a9f8451-Folha_2091748" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/447f0578782e7d026d416a6a6a9f8451-Folha_2091748" alt="OS 99392" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>29/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99392" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="492" data-linha="Premium" data-id="99565">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99565</span><button class="copyid" draggable="false" title="Copiar ID 99565" data-id="99565" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e2dc5e147a4229838d0eb49a094a2d77-Folha_2098590" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e2dc5e147a4229838d0eb49a094a2d77-Folha_2098590" alt="OS 99565" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>29/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99565" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="503" data-linha="Premium" data-id="99620">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99620</span><button class="copyid" draggable="false" title="Copiar ID 99620" data-id="99620" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9351709a4f206984187d863185694d42-Folha_2089809" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9351709a4f206984187d863185694d42-Folha_2089809" alt="OS 99620" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>29/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99620" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="507" data-linha="Premium" data-id="99663">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99663</span><button class="copyid" draggable="false" title="Copiar ID 99663" data-id="99663" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/93765c9b9becf37e25c06f6277f8f80d-Folha_2096032" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/93765c9b9becf37e25c06f6277f8f80d-Folha_2096032" alt="OS 99663" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>29/07</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99663" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card premium" draggable="true" data-uid="530" data-linha="Premium" data-id="99549">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99549</span><button class="copyid" draggable="false" title="Copiar ID 99549" data-id="99549" onclick="copiarId(this)">📋 ID</button></div>
@@ -1031,22 +739,6 @@
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99812" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
-    </div><div class="card premium" draggable="true" data-uid="460" data-linha="Premium" data-id="99421">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99421</span><button class="copyid" draggable="false" title="Copiar ID 99421" data-id="99421" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/92349dcc9a194418bbff9644503a3779-Folha_2088881" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/92349dcc9a194418bbff9644503a3779-Folha_2088881" alt="OS 99421" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>03/08</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99421" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="494" data-linha="Premium" data-id="99584">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99584</span><button class="copyid" draggable="false" title="Copiar ID 99584" data-id="99584" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/9f6dd6b5c8881a6e83b41e0d7b4974bb-Folha_2098931" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/9f6dd6b5c8881a6e83b41e0d7b4974bb-Folha_2098931" alt="OS 99584" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>03/08</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99584" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
     </div><div class="card premium" draggable="true" data-uid="520" data-linha="Premium" data-id="99776">
       <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99776</span><button class="copyid" draggable="false" title="Copiar ID 99776" data-id="99776" onclick="copiarId(this)">📋 ID</button></div>
       <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ffd235eb09cd49039f3f25e0730ed10b-Folha_2103958" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ffd235eb09cd49039f3f25e0730ed10b-Folha_2103958" alt="OS 99776" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
@@ -1054,22 +746,6 @@
         <div class="ppfest">PPF estimado <b>03/08</b></div><div class="ajustado">✓ data ajustada</div>
         <div class="entrega">🏠 Entrega em domicílio</div>
         <button class="feitobtn" data-id="99776" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="501" data-linha="Premium" data-id="99532">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99532</span><button class="copyid" draggable="false" title="Copiar ID 99532" data-id="99532" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/e7b88d4c54cbc4fd5397f25ab6b95c98-Folha_2097938" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/e7b88d4c54cbc4fd5397f25ab6b95c98-Folha_2097938" alt="OS 99532" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>05/08</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99532" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
-      </div>
-    </div><div class="card premium" draggable="true" data-uid="508" data-linha="Premium" data-id="99538">
-      <div class="cardtop"><span class="badge premium">PREMIUM</span><span class="osid">OS 99538</span><button class="copyid" draggable="false" title="Copiar ID 99538" data-id="99538" onclick="copiarId(this)">📋 ID</button></div>
-      <div class="imgwrap"><a href="https://api-img.s3.us-east-1.amazonaws.com/ac12fc475c153450916215b7fe67b799-Folha_2098041" target="_blank" rel="noopener" draggable="false" title="abrir folha em tamanho real"><img loading="lazy" draggable="false" referrerpolicy="no-referrer" src="https://api-img.s3.us-east-1.amazonaws.com/ac12fc475c153450916215b7fe67b799-Folha_2098041" alt="OS 99538" onerror="this.closest('.imgwrap').classList.add('failed');this.style.display='none'"></a></div>
-      <div class="info">
-        <div class="ppfest">PPF estimado <b>05/08</b></div><div class="ajustado">✓ data ajustada</div>
-        <div class="entrega">🏠 Entrega em domicílio</div>
-        <button class="feitobtn" data-id="99538" onclick="feito(this)">✓ finalizado — tirar do quadro</button>
       </div>
     </div><div class="card essencial" draggable="true" data-uid="489" data-linha="Essencial" data-id="99499">
       <div class="cardtop"><span class="badge essencial">ESSENCIAL</span><span class="osid">OS 99499</span><button class="copyid" draggable="false" title="Copiar ID 99499" data-id="99499" onclick="copiarId(this)">📋 ID</button></div>
@@ -1130,7 +806,7 @@
     </div></div>
 </div></div>
 <script>
-var GEN='2026-07-13';
+var GEN='2026-07-20';
 var FIN_ENDPOINT='https://script.google.com/macros/s/AKfycbyI4K8jP-sSU-agak3xRjsNQe_N6elEzEX8VU1hG0PQ6rwWPDLk2ek3-LjEPEaF1oDDQA/exec';
 var FIN_TOKEN='SB-quadro-2026';
 function lsGet(k,def){try{return JSON.parse(localStorage.getItem(k)||def)}catch(e){return JSON.parse(def)}}
