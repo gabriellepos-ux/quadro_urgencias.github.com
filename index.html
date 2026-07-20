@@ -1131,9 +1131,12 @@
 </div></div>
 <script>
 var GEN='2026-07-13';
+var FIN_ENDPOINT='https://script.google.com/macros/s/AKfycbyI4K8jP-sSU-agak3xRjsNQe_N6elEzEX8VU1hG0PQ6rwWPDLk2ek3-LjEPEaF1oDDQA/exec';
+var FIN_TOKEN='SB-quadro-2026';
 function lsGet(k,def){try{return JSON.parse(localStorage.getItem(k)||def)}catch(e){return JSON.parse(def)}}
 function getFin(){var s=new Set(lsGet('quadro_fin','[]'));try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('quadro_fin_')===0){try{JSON.parse(localStorage.getItem(k)).forEach(function(x){s.add(x);});}catch(e){}}}}catch(e){}return s;}
 function saveFin(){try{localStorage.setItem('quadro_fin',JSON.stringify([...finSet]))}catch(e){}}
+function gravarFin(id){if(!window.FIN_ENDPOINT)return;try{fetch(FIN_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({id:String(id),token:(window.FIN_TOKEN||'')})});}catch(e){}}
 var finSet=getFin();
 var moves=lsGet('quadro_moves_'+GEN,'{}');
 function saveMoves(){try{localStorage.setItem('quadro_moves_'+GEN,JSON.stringify(moves))}catch(e){}}
@@ -1160,8 +1163,8 @@ function render(){
 function filtra(l,btn){curLinha=l;document.querySelectorAll('#linhagrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');render();}
 function buscar(v){curBusca=(v||'').replace(/[^0-9]/g,'');render();}
 function setTam(s,btn){var w={p:'340px',m:'440px',g:'600px'}[s];document.documentElement.style.setProperty('--colw',w);document.querySelectorAll('#sizegrp .fbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
-function tirarBox(){var v=document.getElementById('finbox').value;v.split(/[^0-9]+/).filter(Boolean).forEach(function(i){finSet.add(i);});document.getElementById('finbox').value='';saveFin();render();}
-function feito(btn){finSet.add(btn.dataset.id);saveFin();render();}
+function tirarBox(){var v=document.getElementById('finbox').value;v.split(/[^0-9]+/).filter(Boolean).forEach(function(i){finSet.add(i);gravarFin(i);});document.getElementById('finbox').value='';saveFin();render();}
+function feito(btn){var id=btn.dataset.id;finSet.add(id);saveFin();gravarFin(id);render();}
 function limparFin(){if(confirm('Trazer todos os pedidos de volta ao quadro?')){try{var rm=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k==='quadro_fin'||k.indexOf('quadro_fin_')===0))rm.push(k);}rm.forEach(function(k){localStorage.removeItem(k);});}catch(e){}finSet=new Set();render();}}
 function copiarFin(){var arr=[...finSet];if(!arr.length){alert('Nenhum finalizado tirado ainda.');return;}var t=arr.join('\n');navigator.clipboard.writeText(t).then(function(){alert(arr.length+' IDs copiados. Cole na coluna A da aba FINALIZADOS QUADRO.');},function(){window.prompt('Copie os IDs (Ctrl+C) e cole na aba:',arr.join(' '));});}
 function applyMoves(){Object.keys(moves).forEach(function(uid){var c=document.querySelector('.card[data-uid="'+uid+'"]');var t=document.querySelector('.cards[data-day="'+moves[uid]+'"]');if(c&&t)t.appendChild(c);});}
